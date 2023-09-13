@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title><%= htmlWebpackPlugin.options.title %></title>
+
+    <!-- place the open graph meta tags here.... -->
+  </head>
+  <body>
+    <div id="root"></div>
+    <div id="toaster-portal"></div>
+    <script>
+      // This ensures the page is refreshed when the user navigates back to it
+      // It is needed because the browser caches the page and does not reload it
+      window.addEventListener("pageshow", function (event) {
+        try {
+          if (
+            event.persisted ||
+            performance.getEntriesByType("navigation")[0].type ===
+              "back_forward"
+          ) {
+            location.reload();
+          }
+        } catch (error) {}
+      });
+    </script>
+  </body>
+</html>

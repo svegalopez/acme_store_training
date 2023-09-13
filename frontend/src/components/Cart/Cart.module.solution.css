@@ -1,0 +1,71 @@
+.outer {
+  display: flex;
+  flex-direction: column;
+  margin: 0 auto;
+  row-gap: 16px;
+  max-width: 700px;
+  margin-bottom: 32px;
+}
+
+.total {
+  display: flex;
+  border: solid 2px var(--dark);
+  justify-content: space-between;
+  padding: 16px;
+  align-items: center;
+  column-gap: 8px;
+  box-shadow: 2px 3px 15px 1px rgba(0, 0, 0, 0.1);
+  border: solid 1px #1632652c;
+}
+
+.cartBtn {
+  flex-basis: 200px;
+}
+
+.shiftLeft {
+  margin-left: auto;
+}
+
+.checkoutConfirmationOuter {
+  background-color: var(--white);
+  color: var(--dark);
+  padding: 32px;
+  border: solid 2px var(--dark);
+  box-shadow: 2px 3px 15px 1px rgba(0, 0, 0, 0.1);
+}
+
+.greeting {
+  font-family: "Eczar", sans-serif;
+  font-size: 1.3rem;
+  color: var(--dark);
+}
+
+.confirmationText {
+  line-height: 1.5;
+}
+
+.link {
+  text-decoration: underline;
+  color: var(--hl);
+}
+
+.btnBar {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 24px;
+}
+
+.btn {
+  width: 100px;
+}
+
+.shopLink {
+  font-weight: 600;
+  color: inherit;
+}
+
+@media (max-width: 580px) {
+  .total {
+    font-size: 0.9rem;
+  }
+}

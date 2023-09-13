@@ -1,0 +1,13 @@
+{
+  "name": "acme_store",
+  "version": "1.0.0",
+  "scripts": {
+    "test": "cypress open",
+    "test:ci": "cypress run",
+    "reset": "backend/node_modules/.bin/dotenv -e backend/.env.test backend/node_modules/.bin/prisma migrate reset -- --force --schema backend/prisma/schema.prisma"
+  },
+  "license": "ISC",
+  "dependencies": {
+    "cypress": "^12.17.2"
+  }
+}

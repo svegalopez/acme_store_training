@@ -1,0 +1,179 @@
+.outer {
+  display: flex;
+  flex-direction: column;
+  max-width: 800px;
+  border: solid 1px #ccc;
+  margin: 0 auto;
+  min-height: 100px;
+  box-shadow: 0 0 10px 0 #ccc;
+}
+
+.header {
+  border-bottom: solid 1px #ccc;
+}
+
+.row {
+  overflow: hidden;
+  align-items: center;
+  display: flex;
+  padding: 8px;
+}
+
+.row a {
+  color: var(--dark);
+}
+
+.row:not(.header) + .row {
+  border-top: solid 1px #cccccc75;
+}
+
+.row.lastRow {
+  border-bottom: solid 1px #cccccc75;
+}
+
+.col {
+  column-gap: 8px;
+  display: flex;
+  align-items: center;
+  padding: 2px;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.colLabel {
+  cursor: pointer;
+}
+
+.col1 .colLabel {
+  cursor: auto;
+}
+
+.colLabel svg {
+  width: 16px;
+  height: 16px;
+  position: relative;
+  top: 3px;
+}
+
+.activeFilter {
+  color: var(--hl);
+}
+
+.col1 {
+  flex-basis: 45%;
+}
+
+.col2 {
+  flex-basis: 25%;
+}
+
+.col3 {
+  flex-basis: 18%;
+}
+
+.col4 {
+  flex-basis: 12%;
+}
+
+.mobileLabel {
+  font-weight: 500;
+  display: none;
+  cursor: pointer;
+}
+
+.mobileLabel svg {
+  width: 16px;
+  height: 16px;
+  position: relative;
+  top: 3px;
+}
+
+.noOrders {
+  text-align: center;
+}
+
+.selectContent {
+  width: 120px;
+  border: solid 1px var(--dark);
+  background-color: var(--white);
+  color: var(--dark);
+}
+
+.selectItem {
+  padding: 4px;
+}
+
+.checkmark {
+  margin-left: 6px;
+  position: relative;
+  top: 3px;
+}
+
+.pageSelect {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 8px 0;
+  column-gap: 8px;
+}
+
+.pageSelect + .header {
+  border-top: solid 1px #cccccc75;
+}
+
+.pageBtn svg {
+  position: relative;
+  top: 2px;
+}
+
+.row:nth-last-of-type(odd) {
+  background-color: #cccccc70;
+}
+
+.activeRow {
+  background-color: #adc8fe43 !important;
+}
+
+.centerText {
+  text-align: center;
+  margin: 32px;
+}
+
+.selectTrigger {
+  height: 30px;
+  width: 120px;
+  border: solid 1px #ccc;
+}
+
+.selectIcon {
+  margin-left: 2px;
+  position: relative;
+  top: 3px;
+}
+
+@media screen and (max-width: 768px) {
+  .header {
+    display: none;
+  }
+
+  .row {
+    flex-direction: column;
+    row-gap: 4px;
+    align-items: start;
+  }
+
+  .mobileLabel {
+    display: inline;
+  }
+
+  .col1 {
+    text-decoration: underline;
+    margin-bottom: 4px;
+  }
+}
+
+@media screen and (max-width: 400px) {
+  .outer {
+    font-size: 14px;
+  }
+}

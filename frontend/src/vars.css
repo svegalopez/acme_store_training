@@ -1,0 +1,10 @@
+:root {
+  --headerHeight: 56px;
+  --headerHeightMob: 46px;
+
+  /* Color Palette */
+  --hl: #f49865;
+  --dark: #163265;
+  --light: #d0fef6;
+  --white: #f5f3ed;
+}

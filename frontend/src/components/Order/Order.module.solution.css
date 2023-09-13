@@ -1,0 +1,150 @@
+.outer {
+  display: flex;
+  flex-direction: column;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.backBtn {
+  padding-left: 0;
+  margin-right: auto;
+  border: none;
+  background: none;
+  margin-bottom: 32px;
+  padding-bottom: 8px;
+  cursor: pointer;
+  color: var(--dark);
+}
+
+.confirmation {
+  text-align: center;
+  margin-bottom: 16px;
+}
+
+.details {
+  display: flex;
+}
+
+.detailsCard {
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  border: solid 1px #ccc;
+  width: 100%;
+}
+
+.items {
+  display: flex;
+  margin-top: 24px;
+}
+
+.orderList {
+  display: flex;
+  flex-direction: column;
+  flex-basis: 60%;
+}
+
+.orderItem {
+  margin-top: 16px;
+  display: flex;
+  border-bottom: solid 1px #ccc;
+}
+
+.orderItemImg {
+  width: 60px;
+  height: auto;
+}
+
+.orderItemDetails {
+  padding: 4px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+}
+
+.nameAndPrice {
+  display: flex;
+  justify-content: space-between;
+}
+
+.name {
+  font-weight: 500;
+}
+
+.quantity {
+  font-size: 0.8rem;
+}
+
+.orderSummary {
+  padding: 24px;
+  padding-right: 0;
+  flex-basis: 40%;
+}
+
+.orderSummaryInner {
+  padding: 24px;
+  border: solid 1px #ccc;
+}
+
+.totalContainer {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 24px;
+}
+
+.spaced {
+  display: flex;
+  justify-content: space-between;
+}
+
+.spaced + .spaced {
+  margin-top: 4px;
+}
+
+@media screen and (min-width: 501px) {
+  .detailsCard:nth-child(2) {
+    border-left: none;
+    border-right: none;
+  }
+}
+
+@media screen and (max-width: 500px) {
+  .details {
+    flex-direction: column;
+  }
+
+  .detailsCard {
+    align-items: center;
+    text-align: center;
+  }
+
+  .detailsCard:nth-child(2) {
+    border-top: none;
+    border-bottom: none;
+  }
+}
+
+.orderInfo {
+  justify-content: space-around;
+  display: flex;
+  margin-top: 24px;
+}
+
+@media screen and (max-width: 600px) {
+  .items {
+    flex-direction: column;
+  }
+
+  .orderSummary {
+    padding: 0;
+    margin-top: 16px;
+  }
+}
+
+@media screen and (max-width: 450px) {
+  .orderInfo {
+    flex-direction: column;
+    row-gap: 8px;
+  }
+}

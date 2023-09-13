@@ -1,0 +1,32 @@
+{
+  "name": "backend",
+  "version": "1.0.0",
+  "main": "server.js",
+  "scripts": {
+    "start:dev": "echo \"Implement this command...\" && exit 1",
+    "start": "echo \"Implement this command...\" && exit 1",
+    "start:test": "echo \"Implement this command...\" && exit 1",
+    "migrate:deploy": "echo \"Implement this command...\" && exit 1"
+  },
+  "prisma": {
+    "seed": "node prisma/seed.js"
+  },
+  "license": "ISC",
+  "dependencies": {
+    "@prisma/client": "^4.16.2",
+    "cookie-parser": "^1.4.6",
+    "cors": "^2.8.5",
+    "dotenv": "^16.3.1",
+    "express": "^4.18.2",
+    "form-data": "^4.0.0",
+    "google-auth-library": "^9.0.0",
+    "jsonwebtoken": "^9.0.1",
+    "mailgun.js": "^9.1.2",
+    "stripe": "^12.9.0"
+  },
+  "devDependencies": {
+    "dotenv-cli": "^7.2.1",
+    "nodemon": "^3.0.1",
+    "prisma": "^4.16.2"
+  }
+}

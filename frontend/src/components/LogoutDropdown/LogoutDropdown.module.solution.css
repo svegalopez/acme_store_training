@@ -1,0 +1,30 @@
+.logoutLink {
+  border: none;
+  background-color: transparent;
+  font-weight: bold;
+  text-decoration: none;
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  color: var(--white);
+}
+
+.dropDownContent {
+  padding: 4px;
+  background-color: var(--white);
+  min-width: 150px;
+  border-radius: 6px;
+  box-shadow: 0px 10px 38px -10px rgba(22, 23, 24, 0.35),
+    0px 10px 20px -15px rgba(22, 23, 24, 0.2);
+}
+
+.dropDownItem {
+  padding: 2px;
+  color: var(--dark);
+  cursor: pointer;
+}
+
+.dropDownIcon {
+  position: relative;
+  top: 3px;
+}

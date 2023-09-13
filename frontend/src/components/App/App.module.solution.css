@@ -1,0 +1,6 @@
+.container {
+  background-color: var(--white);
+  min-height: 68%;
+  display: flex;
+  justify-content: center;
+}

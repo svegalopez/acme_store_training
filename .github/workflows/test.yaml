@@ -1,0 +1,13 @@
+name: E2E Testing
+
+on:
+  pull_request:
+    branches: ["main"]
+  workflow_dispatch:
+
+jobs:
+  test:
+    name: E2E Tests
+    runs-on: ubuntu-latest
+
+    # Implement the workflow here...

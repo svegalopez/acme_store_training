@@ -1,0 +1,47 @@
+.header {
+  background-color: var(--dark);
+  position: relative;
+}
+
+.navbar {
+  background-color: inherit;
+  display: flex;
+  justify-content: center;
+  column-gap: 36px;
+}
+
+.navbar a {
+  color: var(--white);
+  min-width: 80px;
+  font-size: 1.25rem;
+  font-family: "Eczar", sans-serif;
+  text-align: center;
+}
+
+.headerImage {
+  height: 200px;
+  width: auto;
+}
+
+.imgContainer {
+  display: flex;
+  justify-content: center;
+}
+
+@media screen and (max-width: 660px) {
+  .navbar a {
+    min-width: 0;
+  }
+}
+
+@media screen and (max-width: 500px) {
+  .navbar {
+    padding: 16px;
+  }
+}
+
+@media screen and (max-width: 728px) {
+  .slideDown {
+    padding-top: 32px;
+  }
+}

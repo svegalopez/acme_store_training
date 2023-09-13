@@ -1,0 +1,12 @@
+.btn {
+  min-height: 40px;
+  background-color: var(--dark);
+  border: none;
+  color: var(--white);
+  font-weight: bold;
+}
+
+.btn:hover {
+  color: var(--hl);
+  cursor: pointer;
+}
