@@ -1,7 +1,13 @@
+const randomBytes = require("crypto").randomBytes;
+const scryptSync = require("crypto").scryptSync;
+
 exports.getHash = (password) => {
-  // Implement this function that returns a hashed password with a salt
+  const salt = randomBytes(16).toString("hex");
+  return `${scryptSync(password, salt, 32).toString("hex")}${salt}`;
 };
 
 exports.compareSync = (provided, stored) => {
-  // Implement this function that compares the provided password with the stored password
+  const storedSalt = stored.slice(-32);
+  const storedHash = stored.slice(0, 64);
+  return storedHash === scryptSync(provided, storedSalt, 32).toString("hex");
 };

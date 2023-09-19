@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "main": "server.js",
   "scripts": {
-    "start:dev": "echo \"Implement this command...\" && exit 1",
+    "start:dev": "nodemon server.js",
     "start": "echo \"Implement this command...\" && exit 1",
     "start:test": "echo \"Implement this command...\" && exit 1",
     "migrate:deploy": "echo \"Implement this command...\" && exit 1"
