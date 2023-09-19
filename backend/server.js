@@ -8,10 +8,7 @@ const app = express();
 // Middleware
 app.use(cookieParser());
 app.use(express.urlencoded({ extended: true }));
-
-app.use((req, res, next) => {
-  // Implement this middleware that makes sure the "/webhook" endpoint is not parsed as JSON
-});
+app.use(express.json());
 
 app.use(
   cors({
