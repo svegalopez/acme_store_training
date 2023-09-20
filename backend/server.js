@@ -10,11 +10,11 @@ app.use(cookieParser());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
-app.use(
-  cors({
-    // Fill this out...
-  })
-);
+// app.use(
+//   cors({
+//     // Fill this out...
+//   })
+// );
 
 // Health check
 app.get("/health", (req, res) => {
