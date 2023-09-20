@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 const { prisma } = require("../clients");
 const crypto = require("crypto");
-const { authenticate, authorize } = require("../middleware");
+const { authenticate } = require("../middleware");
 const { compareSync, getHash } = require("../utils/passwordHash");
 const { sign } = require("jsonwebtoken");
 const secret = process.env.JWT_SECRET;
@@ -38,6 +38,12 @@ router.post("/register", async (req, res) => {
     }
 
     if (typeof email !== "string") {
+      return res.status(400).send("Invalid email");
+    }
+
+    // Use a regex to validate email
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
       return res.status(400).send("Invalid email");
     }
 
@@ -92,12 +98,6 @@ router.post("/login", async (req, res) => {
     }
 
     if (typeof email !== "string") {
-      return res.status(400).send("Invalid email");
-    }
-
-    // User a regex to make sure the email is valid
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(email)) {
       return res.status(400).send("Invalid email");
     }
 
@@ -202,14 +202,5 @@ router.get("/google-callback", async (req, res) => {
     })
     .redirect(process.env.APP_URL);
 });
-
-router.get(
-  "/protected-resource",
-  authenticate(),
-  authorize("admin"),
-  (req, res) => {
-    return res.send("This is a protected resource");
-  }
-);
 
 module.exports = router;
