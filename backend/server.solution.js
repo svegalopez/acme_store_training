@@ -8,7 +8,6 @@ const app = express();
 // Middleware
 app.use(cookieParser());
 app.use(express.urlencoded({ extended: true }));
-
 app.use((req, res, next) =>
   req.path === "/api/webhook" ? next() : express.json()(req, res, next)
 );

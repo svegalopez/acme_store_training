@@ -13,11 +13,11 @@ router.post(
   async (req, res) => {
     try {
       const { cart, isOneClick } = req.body;
-      if (!cart) res.status(400).send("Bad request, cart is required");
+      if (!cart) return res.status(400).send("Bad request, cart is required");
 
       const session = await stripe.checkout.sessions.create({
         shipping_address_collection: {
-          allowed_countries: ["US", "CA"],
+          allowed_countries: ["US", "CA"], // This is up to you.
         },
         billing_address_collection: "required",
         shipping_options: [
@@ -65,14 +65,14 @@ router.post(
         line_items: JSON.parse(cart).map((item) => ({
           price: item.priceId,
           quantity: item.qty,
-          tax_rates: ["txr_1NTWfVFx43n0rvYmDHg3gjWR"],
+          tax_rates: ["txr_xxxxxxxxxxxxxxxxxxxxxxxx"], // You must create this tax rate in your Stripe dashboard
         })),
         mode: "payment",
-        success_url: `${APP_URL}/order-confirmation?session_id={CHECKOUT_SESSION_ID}`, // if user is logged in you can redirect to /my-orders/:id, else user will receive an email with order details. access the id of the session using ...?session_id={CHECKOUT_SESSION_ID}
+        success_url: `${APP_URL}/order-confirmation?session_id={CHECKOUT_SESSION_ID}`,
         cancel_url: isOneClick === "true" ? APP_URL : `${APP_URL}/cart`,
         client_reference_id: req.user ? req.user.id : undefined,
         metadata: {
-          IS_PROD: process.env.IS_PROD ? "true" : undefined,
+          IS_PROD: process.env.IS_PROD ? "true" : undefined, // Used until you switch to live mode
         },
       });
 
@@ -92,7 +92,7 @@ router.get("/order-confirmation", async (req, res) => {
   try {
     const { session_id } = req.query;
     if (!session_id)
-      res.status(400).send("Bad request, session_id is required");
+      return res.status(400).send("Bad request, session_id is required");
 
     const session = await stripe.checkout.sessions.retrieve(session_id, {
       expand: [
@@ -149,15 +149,12 @@ async function fulfillPurchase(session) {
 
     // Send confirmation email
     const messageData = {
-      from: "Admin <email@sandboxdc00cf352cf44b4ea7c1ebe3330d8423.mailgun.org>",
+      from: "Admin <email@sandboxdcxxx.mailgun.org>", // Make sure this matches your Mailgun domain
       to: session.customer_details.email,
       subject: "Order Confirmation",
       html: JSON.stringify(session.line_items),
     };
-    await mg.messages.create(
-      "sandboxdc00cf352cf44b4ea7c1ebe3330d8423.mailgun.org",
-      messageData
-    );
+    await mg.messages.create("sandboxdcxxx.mailgun.org", messageData); // Make sure this matches your Mailgun domain
 
     // Add Order to database
     await prisma.order.create({
