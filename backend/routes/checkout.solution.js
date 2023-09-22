@@ -103,6 +103,7 @@ router.get("/order-confirmation", async (req, res) => {
 
     return res.json(session);
   } catch (error) {
+    // TODO - turn in a {status: xxx, message: ""} error object
     console.error(error);
     res.status(400).send(error.message);
   }
