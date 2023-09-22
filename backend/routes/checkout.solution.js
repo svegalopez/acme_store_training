@@ -13,7 +13,7 @@ router.post(
   async (req, res) => {
     try {
       const { cart, isOneClick } = req.body;
-      if (!cart) throw Error("Bad request");
+      if (!cart) res.status(400).send("Bad request, cart is required");
 
       const session = await stripe.checkout.sessions.create({
         shipping_address_collection: {
@@ -80,9 +80,9 @@ router.post(
     } catch (error) {
       console.log(error);
       res
-        .status(400)
+        .status(500)
         .send(
-          `Unable to create checkout session at this time. <a href="${APP_URL}" >Go back</a> and try again.`
+          `Unable to create checkout session at this time. Go back and try again.`
         );
     }
   }
@@ -91,7 +91,8 @@ router.post(
 router.get("/order-confirmation", async (req, res) => {
   try {
     const { session_id } = req.query;
-    if (!session_id) throw Error("Bad request");
+    if (!session_id)
+      res.status(400).send("Bad request, session_id is required");
 
     const session = await stripe.checkout.sessions.retrieve(session_id, {
       expand: [
@@ -103,9 +104,8 @@ router.get("/order-confirmation", async (req, res) => {
 
     return res.json(session);
   } catch (error) {
-    // TODO - turn in a {status: xxx, message: ""} error object
     console.error(error);
-    res.status(400).send(error.message);
+    res.status(500).send("An error occurred. Please try again later.");
   }
 });
 
@@ -113,19 +113,15 @@ router.post(
   "/webhook",
   express.raw({ type: "application/json" }),
   async (req, res) => {
-    const payload = req.body;
-    const sig = req.headers["stripe-signature"];
-    let event;
-
     try {
-      event = stripe.webhooks.constructEvent(payload, sig, WEBHOOK_SECRET);
-    } catch (err) {
-      console.error(err);
-      return res.status(400).send(`Webhook Error: ${err.message}`);
-    }
+      const payload = req.body;
+      const sig = req.headers["stripe-signature"];
+      let event = stripe.webhooks.constructEvent(payload, sig, WEBHOOK_SECRET);
 
-    // Handle the checkout.session.completed event
-    if (event.type === "checkout.session.completed") {
+      if (event.type !== "checkout.session.completed")
+        return res.status(200).end();
+
+      // Handle the checkout.session.completed event
       const session = await stripe.checkout.sessions.retrieve(
         event.data.object.id,
         {
@@ -136,21 +132,21 @@ router.post(
           ],
         }
       );
+      res.status(200).end();
 
-      // Isolate environments; only fulfill orders that were created in the same environment.
-      // This is needed as long as production is configured to use the Stripe test API.
-      // Once you switch to the live API, you can remove this check.
-      if (session.metadata.IS_PROD === process.env.IS_PROD) {
-        fulfillPurchase(session);
-      }
+      // Fulfill the purchase
+      fulfillPurchase(session);
+    } catch (error) {
+      console.error(error);
+      res.status(500).end();
     }
-
-    return res.status(200).end();
   }
 );
 
 async function fulfillPurchase(session) {
   try {
+    if (session.metadata.IS_PROD !== process.env.IS_PROD) return;
+
     // Send confirmation email
     const messageData = {
       from: "Admin <email@sandboxdc00cf352cf44b4ea7c1ebe3330d8423.mailgun.org>",
@@ -158,12 +154,10 @@ async function fulfillPurchase(session) {
       subject: "Order Confirmation",
       html: JSON.stringify(session.line_items),
     };
-    await mg.messages
-      .create(
-        "sandboxdc00cf352cf44b4ea7c1ebe3330d8423.mailgun.org",
-        messageData
-      )
-      .catch((err) => console.log(err));
+    await mg.messages.create(
+      "sandboxdc00cf352cf44b4ea7c1ebe3330d8423.mailgun.org",
+      messageData
+    );
 
     // Add Order to database
     await prisma.order.create({
@@ -174,9 +168,9 @@ async function fulfillPurchase(session) {
         total: session.amount_total / 100,
       },
     });
-    console.log("order written to db");
-  } catch (err) {
-    console.error(err);
+  } catch (error) {
+    console.error(`Error fulfilling order for session ${session.id}:`);
+    console.error(error);
   }
 }
 
