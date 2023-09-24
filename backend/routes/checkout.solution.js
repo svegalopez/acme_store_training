@@ -116,7 +116,14 @@ router.post(
     try {
       const payload = req.body;
       const sig = req.headers["stripe-signature"];
-      let event = stripe.webhooks.constructEvent(payload, sig, WEBHOOK_SECRET);
+
+      let event;
+      try {
+        event = stripe.webhooks.constructEvent(payload, sig, WEBHOOK_SECRET);
+      } catch (error) {
+        console.error(error);
+        return res.status(400).send(`Webhook Error: ${error.message}`);
+      }
 
       if (event.type !== "checkout.session.completed")
         return res.status(200).end();
@@ -155,6 +162,7 @@ async function fulfillPurchase(session) {
       html: JSON.stringify(session.line_items),
     };
     await mg.messages.create("sandboxdcxxx.mailgun.org", messageData); // Make sure this matches your Mailgun domain
+    console.log(`Confirmation email sent for session ${session.id}`);
 
     // Add Order to database
     await prisma.order.create({
