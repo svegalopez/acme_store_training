@@ -5,7 +5,7 @@
   "scripts": {
     "start:dev": "nodemon server.js",
     "start": "echo \"Implement this command...\" && exit 1",
-    "start:test": "echo \"Implement this command...\" && exit 1",
+    "start:test": "npx dotenv -e .env.test node server.js",
     "migrate:deploy": "echo \"Implement this command...\" && exit 1"
   },
   "prisma": {
