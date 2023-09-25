@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 const { prisma } = require("../clients");
 const { authenticate, authorize } = require("../middleware");
+const pageSize = 10;
 
 // Order Routes
 router.get("/my-orders", authenticate(), async (req, res) => {
@@ -54,7 +55,6 @@ router.get("/my-orders/:id", authenticate(), async (req, res) => {
 });
 
 // Admin routes
-const pageSize = 10;
 router.get("/orders", authenticate(), authorize("admin"), async (req, res) => {
   try {
     const query = req.query;
