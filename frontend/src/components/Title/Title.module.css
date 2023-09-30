@@ -1,0 +1,9 @@
+.title {
+  /* Styles for Title component */
+  color: orange;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 80vh;
+  font-size: 5rem;
+}
