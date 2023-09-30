@@ -12,11 +12,12 @@ app.use((req, res, next) =>
   req.path === "/api/webhook" ? next() : express.json()(req, res, next)
 );
 
-// app.use(
-//   cors({
-//     // Fill this out...
-//   })
-// );
+app.use(
+  cors({
+    origin: process.env.APP_URL,
+    credentials: true,
+  })
+);
 
 // Health check
 app.get("/health", (req, res) => {

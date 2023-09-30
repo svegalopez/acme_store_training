@@ -1,22 +1,26 @@
 import React from "react";
-import Header from "../Header/Header";
-import Footer from "../Footer/Footer";
-import styles from "./App.module.css";
-import logo from "../../assets/logo.svg";
+import Title from "../Title/Title";
 
 function App() {
+  const [products, setProducts] = React.useState([]);
+
+  const onClick = async () => {
+    const response = await fetch("http://localhost:3088/api/products");
+    const data = await response.json();
+    setProducts(data);
+  };
+
   return (
     <>
-      {/* <Header /> */}
-      <main className={styles.container}>
-        Hello World
-        <img style={{ width: "100px" }} src={logo} alt="the logo" />
-        {/* <Routes>{ Routes go here }</Routes> */}
-      </main>
-      {/* <Footer /> */}
+      <Title text="ACME Pet Supplies" />
+      <button onClick={onClick}>Click me</button>
+      <ul>
+        {products.map((el) => (
+          <li>{el.name}</li>
+        ))}
+      </ul>
     </>
   );
 }
 
 export default App;
-// style={{ width: "100px" }}
