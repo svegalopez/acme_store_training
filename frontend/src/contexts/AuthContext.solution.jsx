@@ -1,6 +1,5 @@
 import React from "react";
 import { useQueryClient } from "@tanstack/react-query";
-import { useSearchParams } from "react-router-dom";
 
 export const AuthContext = React.createContext();
 
