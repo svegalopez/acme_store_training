@@ -1,25 +1,21 @@
 import React from "react";
-import Title from "../Title/Title";
+import Header from "../Header/Header";
+import Footer from "../Footer/Footer";
+import styles from "./App.module.css";
 import { AuthContextProvider } from "../../contexts/AuthContext";
+import { Routes, Route } from "react-router-dom";
 
 function App() {
-  const [products, setProducts] = React.useState([]);
-
-  const onClick = async () => {
-    const response = await fetch("http://localhost:3088/api/products");
-    const data = await response.json();
-    setProducts(data);
-  };
-
   return (
     <AuthContextProvider>
-      <Title text="ACME Pet Supplies" />
-      <button onClick={onClick}>Click me</button>
-      <ul>
-        {products.map((el) => (
-          <li key={el.id}>{el.name}</li>
-        ))}
-      </ul>
+      <Header />
+      <main className={styles.container}>
+        <Routes>
+          <Route path="/" element={<h1>Shop</h1>} />
+          <Route path="/login" element={<h1>Login</h1>} />
+        </Routes>
+      </main>
+      <Footer />
     </AuthContextProvider>
   );
 }
