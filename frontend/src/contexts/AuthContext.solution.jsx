@@ -1,10 +1,8 @@
 import React from "react";
-import { useQueryClient } from "@tanstack/react-query";
 
 export const AuthContext = React.createContext();
 
 export const AuthContextProvider = function ({ children }) {
-  const queryClient = useQueryClient();
   const [user, setUser] = React.useState(null);
   const [loading, setLoading] = React.useState(true);
 
@@ -88,13 +86,6 @@ export const AuthContextProvider = function ({ children }) {
 
     fetchuser();
   }, []);
-
-  React.useEffect(() => {
-    if (!user) {
-      // Remove all queries on logout
-      queryClient.removeQueries();
-    }
-  }, [user, queryClient]);
 
   if (loading) return null;
 

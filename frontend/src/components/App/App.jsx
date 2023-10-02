@@ -1,5 +1,6 @@
 import React from "react";
 import Title from "../Title/Title";
+import { AuthContextProvider } from "../../contexts/AuthContext";
 
 function App() {
   const [products, setProducts] = React.useState([]);
@@ -11,15 +12,15 @@ function App() {
   };
 
   return (
-    <>
+    <AuthContextProvider>
       <Title text="ACME Pet Supplies" />
       <button onClick={onClick}>Click me</button>
       <ul>
         {products.map((el) => (
-          <li>{el.name}</li>
+          <li key={el.id}>{el.name}</li>
         ))}
       </ul>
-    </>
+    </AuthContextProvider>
   );
 }
 
