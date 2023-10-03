@@ -3,8 +3,8 @@ import styles from "./FormInput.module.css";
 import hide from "../../utils/hide";
 
 function FormInput({
-  errors,
-  formState,
+  error,
+  value,
   changeHandler,
   name,
   type,
@@ -23,14 +23,14 @@ function FormInput({
     <div style={hide(hidden)} className={styles.formElContainer}>
       <input
         ref={ref}
-        className={`${styles.formEl} ${errors[name] && styles.formElError}`}
+        className={`${styles.formEl} ${error && styles.formElError}`}
         type={type}
         placeholder={placeholder}
         name={name}
-        value={formState[name]}
+        value={value}
         onChange={changeHandler}
       />
-      {errors[name] && <p className={styles.error}>{errors[name]}</p>}
+      {error && <p className={styles.error}>{error}</p>}
     </div>
   );
 }

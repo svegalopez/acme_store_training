@@ -21,7 +21,6 @@ function LoginForm({ setLoginError }) {
   const [formState, setFormState] = React.useState({
     email: "",
     password: "",
-    //confirmPassword: "",
   });
 
   const timestamp = React.useRef(Date.now());
@@ -180,8 +179,8 @@ function LoginForm({ setLoginError }) {
 
       <div>
         <FormInput
-          errors={errors}
-          formState={formState}
+          errors={errors["email"]}
+          formState={formState["email"]}
           changeHandler={changeHandler}
           name="email"
           type="email"
@@ -189,23 +188,13 @@ function LoginForm({ setLoginError }) {
         />
 
         <FormInput
-          errors={errors}
-          formState={formState}
+          errors={errors["password"]}
+          formState={formState["password"]}
           changeHandler={changeHandler}
           name="password"
           type="password"
           placeholder="password"
         />
-
-        {/* <FormInput
-          hidden={mode === "login"}
-          errors={errors}
-          formState={formState}
-          changeHandler={changeHandler}
-          name="confirmPassword"
-          type="password"
-          placeholder="confirm password"
-        /> */}
       </div>
 
       <div className={styles.altMethodSection}>

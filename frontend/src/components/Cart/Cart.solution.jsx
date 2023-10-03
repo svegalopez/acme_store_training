@@ -15,11 +15,16 @@ import classes from "../../utils/classes";
 
 export default function Cart() {
   const { items, submitCheckout } = React.useContext(CartContext);
-  const [searchParams] = useSearchParams();
+  const [searchParams, setSearchParams] = useSearchParams();
   const [invalidItems, setInvalidItems] = React.useState({});
 
   useEffect(() => {
-    if (items.length && searchParams.get("submit")) {
+    const submit = searchParams.get("submit");
+    if (submit) {
+      searchParams.delete("submit");
+      setSearchParams(searchParams);
+    }
+    if (items.length && submit) {
       submitCheckout();
     }
   }, [items, searchParams, submitCheckout]);
