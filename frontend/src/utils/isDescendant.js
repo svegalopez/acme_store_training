@@ -1,6 +1,4 @@
-export default function (parentId, child) {
-  const parent = document.getElementById(parentId);
-
+export default function (parent, child) {
   if (child === parent) {
     return true;
   }
