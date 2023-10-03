@@ -2,7 +2,6 @@
   border-top: solid 1px;
   background-color: var(--dark);
   color: var(--white);
-  flex-shrink: 0;
   padding: 20px;
   width: 100%;
 }

@@ -11,12 +11,33 @@ function App() {
       <Header />
       <main className={styles.container}>
         <Routes>
-          <Route path="/" element={<h1>Shop</h1>} />
+          <Route path="/" element={<Shop />} />
           <Route path="/login" element={<h1>Login</h1>} />
         </Routes>
       </main>
       <Footer />
     </AuthContextProvider>
+  );
+}
+
+function Shop() {
+  const [products, setProducts] = React.useState([]);
+
+  const onClick = async () => {
+    const response = await fetch("http://localhost:3088/api/products");
+    const data = await response.json();
+    setProducts(data);
+  };
+
+  return (
+    <div>
+      <button onClick={onClick}>Click me</button>
+      <ul>
+        {products.map((el) => (
+          <li>{el.name}</li>
+        ))}
+      </ul>
+    </div>
   );
 }
 
