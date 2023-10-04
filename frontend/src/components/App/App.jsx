@@ -4,6 +4,7 @@ import Footer from "../Footer/Footer";
 import styles from "./App.module.css";
 import { AuthContextProvider } from "../../contexts/AuthContext";
 import { Routes, Route } from "react-router-dom";
+import Login from "../Login/Login";
 
 function App() {
   return (
@@ -12,7 +13,7 @@ function App() {
       <main className={styles.container}>
         <Routes>
           <Route path="/" element={<Shop />} />
-          <Route path="/login" element={<h1>Login</h1>} />
+          <Route path="/login" element={<Login />} />
         </Routes>
       </main>
       <Footer />

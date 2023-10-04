@@ -1,0 +1,26 @@
+.formEl {
+  width: 100%;
+  border: solid 2px var(--white);
+  height: 30px;
+}
+
+.formEl.formElError:focus {
+  outline: solid 2px var(--hl);
+}
+
+.formEl.formElError:not(:focus) {
+  border: solid 2px var(--hl);
+}
+
+.formElContainer {
+  height: 60px;
+  margin: 0 auto;
+  text-align: center;
+  width: 200px;
+}
+
+.error {
+  color: var(--hl);
+  font-size: 14px;
+  margin-top: 2px;
+}
