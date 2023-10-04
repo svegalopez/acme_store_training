@@ -1,6 +1,8 @@
 import React from "react";
 import styles from "./LoginForm.module.css";
 import { useGoogleLogin } from "@react-oauth/google";
+import Button from "../Button/Button";
+import FormInput from "../FormInput/FormInput";
 
 function LoginForm({ setLoginError }) {
   const [mode, setMode] = React.useState("login");
