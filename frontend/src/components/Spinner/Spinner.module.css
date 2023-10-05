@@ -1,0 +1,31 @@
+.spinner {
+  display: block;
+  width: 64px;
+  height: 64px;
+  margin: 48px auto;
+  border-radius: 50%;
+  border: 6px solid;
+  border-color: var(--dark) var(--hl) var(--dark) var(--hl);
+  animation: dual-ring 3s linear infinite;
+}
+
+.small {
+  width: 20px;
+  height: 20px;
+  border: 3px solid;
+  border-color: var(--dark) var(--hl) var(--dark) var(--hl);
+  margin: 0 auto;
+}
+
+.secondary {
+  border-color: var(--hl) var(--white) var(--hl) var(--white);
+}
+
+@keyframes dual-ring {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}

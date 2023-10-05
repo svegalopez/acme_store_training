@@ -1,0 +1,42 @@
+.outer {
+  padding: 16px;
+  color: var(--white);
+  display: flex;
+  flex-direction: column;
+  border: solid 2px var(--dark);
+  border-radius: 8px;
+  width: 100%;
+  max-width: 350px;
+  margin: 0 auto;
+  min-height: 430px;
+  background-color: var(--dark);
+  box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.5);
+}
+
+.title {
+  margin: 0 auto;
+  margin-bottom: 24px;
+  margin-top: 16px;
+}
+
+.btn {
+  border: solid 2px var(--white);
+  width: 200px;
+  margin: 0 auto;
+  margin-bottom: 16px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  column-gap: 8px;
+}
+
+.altMethodSection {
+  text-align: center;
+  margin-bottom: 24px;
+}
+
+.altMethodAction {
+  text-decoration: underline;
+  display: inline;
+  cursor: pointer;
+}

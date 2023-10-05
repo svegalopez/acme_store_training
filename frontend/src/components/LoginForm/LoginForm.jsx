@@ -1,116 +1,225 @@
 import React from "react";
-import styles from "./LoginForm.module.css";
-import { useGoogleLogin } from "@react-oauth/google";
 import Button from "../Button/Button";
+import styles from "./LoginForm.module.css";
+import { AuthContext } from "../../contexts/AuthContext";
+import { useNavigate, useSearchParams } from "react-router-dom";
+import { useGoogleLogin } from "@react-oauth/google";
 import FormInput from "../FormInput/FormInput";
 
+const validEmailRegex = RegExp(
+  /^(([^<>()\[\]\.,;:\s@\"]+(\.[^<>()\[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i
+);
+
 function LoginForm({ setLoginError }) {
+  const [searchParams, setSearchParams] = useSearchParams();
+  const navigate = useNavigate();
+
   const [mode, setMode] = React.useState("login");
-  const [errors, setErrors] = React.useState({}); // The errors object is used to store the validation error messages
+  const [loading, setLoading] = React.useState(false);
+  const [googleLoading, setgoogleLoading] = React.useState(false);
+  const [errors, setErrors] = React.useState({});
   const [formState, setFormState] = React.useState({
     email: "",
     password: "",
-  }); // The formState object is used to store the form field values
+  });
+
+  const timestamp = React.useRef(Date.now());
+
+  const authCtx = React.useContext(AuthContext);
 
   function validateField(name, value, mode) {
     const errors = {};
-
-    // Fill out the rest of this function
-    // You can use the following switch statement as a guide
-
-    /*
     switch (name) {
       case "password":
-
+        if (!value.length) {
+          errors.password = "Password is required!";
+        } else if (mode === "login") {
+          break;
+        } else if (value.length < 8) {
+          errors.password = "Min lenght must be 8";
+        } else if (!value.match(/[a-z]/g)) {
+          errors.password = "Missing lowercase letter";
+        } else if (!value.match(/[A-Z]/g)) {
+          errors.password = "Missing uppercase letter";
+        } else if (!value.match(/[0-9]/g)) {
+          errors.password = "Missing a number";
+        } else {
+          errors.password = undefined;
+        }
+        break;
       case "email":
-
+        if (!value.length) {
+          errors.email = "Email is required!";
+        } else {
+          errors.email = validEmailRegex.test(value)
+            ? undefined
+            : "Email is not valid!";
+        }
+        break;
       case "confirmPassword":
-
+        if (mode === "register") {
+          errors.confirmPassword =
+            value === formState.password
+              ? undefined
+              : "Passwords do not match!";
+        }
+        break;
       default:
         break;
     }
-    */
 
-    // Return true if there are no errors
+    setErrors((prev) => ({ ...prev, ...errors }));
+    return Object.values(errors).every((e) => e === undefined);
   }
 
-  const changeHandler = React.useCallback((e) => {
-    // Fill this out, don't forget the dependency array...
-    /*
-      Clues:
-      1. Extract the name and value from the event object
-      2. Clear the error for the field that was changed
-      3. Update the formState object with the new value
-    */
-  }, []);
+  const changeHandler = React.useCallback(
+    (e) => {
+      const { name, value } = e.target;
+      // clear errors
+      setErrors((prev) => ({ ...prev, [name]: undefined }));
+      setFormState((prev) => ({ ...prev, [name]: value }));
+    },
+    [setFormState, formState]
+  );
 
   const toggleMode = React.useCallback(() => {
-    // Fill this out, don't forget the dependency array...
-    /*
-      Clues:
-      1. What happens if you attempt to toggle the mode after the form has been submitted?
-      2. Clear the errors object
-      3. Toggle the mode between "login" and "register"
-    */
-  }, []);
+    if (loading) return;
+    setErrors({});
+    setMode((prev) => (prev === "login" ? "register" : "login"));
+  }, [setMode, loading]);
 
-  const submitHandler = React.useCallback((e) => {
-    e.preventDefault();
-    // Fill this out, don't forget the dependency array...
-    /*
-      Clues:
-      1. Validate each field
-      2. If the form is valid, submit the form
-      3. The AuthContext has methods that you can use to submit the form.
-         Those methods accept a callback function (onLogin) that gets called
-         when the request succeds but before the user state is set. You can use 
-         that callback to handle transfering the guest cart items to the user's 
-         cart (See the product requirements)
-      4. After calling the AuthContext method, redirect the user to the appropriate page.
-      5. Catch any errors and display them to the user using the setLoginError function
-         that was passed to this component as a prop.    
-         
-    */
-  }, []);
+  const submitHandler = React.useCallback(
+    (e) => {
+      e.preventDefault();
 
-  /*
+      let formIsValid = true;
+      for (const key in formState) {
+        const valid = validateField(key, formState[key], mode);
+        if (!valid) formIsValid = false;
+      }
+
+      if (formIsValid) {
+        setLoading(true);
+
+        const redirect = searchParams.get("redirect");
+        const onLogin = (user) => {
+          const userCart = localStorage.getItem(`cart.${user.email}`);
+          const guestCart = localStorage.getItem("cart");
+
+          if ((!userCart || userCart === "[]") && guestCart) {
+            // Copy the guest cart to the user's cart if the user's cart is empty
+            localStorage.setItem(`cart.${user.email}`, guestCart);
+          }
+
+          if (redirect === "checkout" && guestCart) {
+            // Copy the guest cart to the user's cart if the user will be redirected to checkout
+            // We assume the user wants to check out the guest cart items
+            localStorage.setItem(`cart.${user.email}`, guestCart);
+          }
+        };
+
+        authCtx[mode](formState.email, formState.password, onLogin)
+          .then(() => {
+            if (redirect === "checkout") {
+              setSearchParams({});
+              navigate("/cart?submit=1");
+            } else {
+              navigate("/");
+            }
+          })
+          .catch((err) => {
+            console.error(err);
+            setLoading(false);
+            setLoginError(err.message);
+          });
+      }
+    },
+    [formState, mode]
+  );
+
   const googleLogin = useGoogleLogin({
-    // Fill this out
-    // Hint1: use the state option to recover the guest cart items by including a unique key that you can use to retrieve the cart items from localStorage
-    // Hint2: use the state option to redirect the user to the cart page after logging in
-    // Read about the state option here:
-    // https://github.com/MomenSherif/react-oauth#usegooglelogin-extra-authorization-code-flow-props
+    flow: "auth-code",
+    ux_mode: "redirect",
+    redirect_uri: process.env.GOOGLE_LOGIN_URI,
+    // state is used to recover contents of guest cart after login, and to preserve the redirect query param
+    state:
+      searchParams.get("redirect") === "checkout"
+        ? `cartkey=cart.${timestamp.current}&redirect=checkout`
+        : `cartkey=cart.${timestamp.current}`,
   });
-  */
 
   const loginWithGoogle = React.useCallback(() => {
-    // Fill this out...
+    setgoogleLoading(true);
 
-    /*
-      Clues:
-      1. Set a state variable to indicate that the user is logging in with google.
-         That state can be used to display a loading indicator. Hmmm.. I wonder where ? In a Button perhaps?
-      2. If there are items in the guest cart, store the contents of the guest cart in local storage with a unique key
-         This will allow the system to transfer the guest cart contents after the user logs in, as long as you know where to find the key.
-    */
+    // If there are items in the guest cart, store the contents of the cart in local storage with the timestamp as the key
+    // This will allow the system to recover the cart contents after the user logs in
+    const guestCart = JSON.parse(localStorage.getItem("cart"));
+    if (guestCart.length) {
+      localStorage.setItem(
+        `cart.${timestamp.current}`,
+        JSON.stringify(guestCart)
+      );
+    }
 
     // Redirect to google login
     googleLogin();
   }, []);
 
   const title = mode === "login" ? "Login" : "Register";
+  let btnText = mode === "login" ? "Login" : "Register";
+
+  const altMethodMessage =
+    mode === "login" ? "Don't have an account?" : "Already have an account?";
+  const altMethodAction =
+    mode === "login" ? "create an account" : "login instead";
 
   return (
-    <form>
-      <h2>{title}</h2>
-
-      <div>{/* Place the FormInput components here... */}</div>
+    <form noValidate onSubmit={submitHandler} className={styles.outer}>
+      <h2 className={styles.title}>{title}</h2>
 
       <div>
-        {/* Message to switch between "login" and "register" goes here...  */}
+        <FormInput
+          error={errors["email"]}
+          value={formState["email"]}
+          changeHandler={changeHandler}
+          name="email"
+          type="email"
+          placeholder="email"
+        />
+
+        <FormInput
+          error={errors["password"]}
+          value={formState["password"]}
+          changeHandler={changeHandler}
+          name="password"
+          type="password"
+          placeholder="password"
+        />
       </div>
 
-      {/* Buttons go here... */}
+      <div className={styles.altMethodSection}>
+        <p>{altMethodMessage}</p>
+        <p onClick={toggleMode} className={styles.altMethodAction}>
+          {altMethodAction}
+        </p>
+      </div>
+      <Button
+        loading={loading}
+        disabled={loading || googleLoading}
+        className={styles.btn}
+      >
+        {btnText}
+      </Button>
+
+      <Button
+        type="button"
+        loading={googleLoading}
+        disabled={loading || googleLoading}
+        clickHandler={loginWithGoogle}
+        className={styles.btn}
+      >
+        Continue with {googleIcon}
+      </Button>
     </form>
   );
 }

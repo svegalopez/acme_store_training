@@ -5,19 +5,22 @@ import styles from "./App.module.css";
 import { AuthContextProvider } from "../../contexts/AuthContext";
 import { Routes, Route } from "react-router-dom";
 import Login from "../Login/Login";
+import { GoogleOAuthProvider } from "@react-oauth/google";
 
 function App() {
   return (
-    <AuthContextProvider>
-      <Header />
-      <main className={styles.container}>
-        <Routes>
-          <Route path="/" element={<Shop />} />
-          <Route path="/login" element={<Login />} />
-        </Routes>
-      </main>
-      <Footer />
-    </AuthContextProvider>
+    <GoogleOAuthProvider clientId={process.env.GOOGLE_CLIENT_ID}>
+      <AuthContextProvider>
+        <Header />
+        <main className={styles.container}>
+          <Routes>
+            <Route path="/" element={<Shop />} />
+            <Route path="/login" element={<Login />} />
+          </Routes>
+        </main>
+        <Footer />
+      </AuthContextProvider>
+    </GoogleOAuthProvider>
   );
 }
 

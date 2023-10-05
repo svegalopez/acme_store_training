@@ -193,6 +193,23 @@ router.get("/google-callback", async (req, res) => {
     { expiresIn: "30d" }
   );
 
+  // Extract the "cartkey" and "redirect" query params from state
+  const state = req.query.state?.split("&");
+  const cartKey = state?.find((s) => s.includes("cartkey"))?.split("=")[1];
+  const redirect = state?.find((s) => s.includes("redirect"))?.split("=")[1];
+
+  // Redirect to frontend
+  const redirectUrl = new URL(process.env.APP_URL);
+  if (redirect === "checkout") {
+    // Immediately redirect to checkout
+    redirectUrl.pathname = "/cart";
+    redirectUrl.searchParams.append("submit", "1");
+  }
+  if (cartKey) {
+    // Recover the guest cart items after login
+    redirectUrl.searchParams.append("cartkey", cartKey);
+  }
+
   return res
     .cookie("access_token", token, {
       httpOnly: true,
@@ -200,7 +217,7 @@ router.get("/google-callback", async (req, res) => {
       secure: true,
       maxAge: 1000 * 60 * 60 * 24 * 14, // 2 week
     })
-    .redirect(process.env.APP_URL);
+    .redirect(redirectUrl); // redirect to cart with submit flag if there is state /cart?submit=1
 });
 
 module.exports = router;

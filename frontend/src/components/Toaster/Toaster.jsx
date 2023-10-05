@@ -19,24 +19,28 @@ export default function Toaster({
 
   useEffect(() => {
     function handleClick(e) {
-      // If the clicked element is not a descendant of the toaster
-      // then close the toaster and call onClose
+      const parent = document.getElementById("ch-toaster");
+      if (!isDescendant(parent, e.target)) {
+        setShow(false);
+        onClose();
+      }
     }
     window.addEventListener("click", handleClick);
     return () => {
-      // TODO: Return a function to remove the event listener
-      // How do you remove an event listener?
+      window.removeEventListener("click", handleClick);
     };
   }, []);
 
   useEffect(() => {
     const id = setTimeout(() => {
-      // TODO: Close the toaster and call onClose
-      // Hint: what happens if the remain prop is passed as true?
+      if (!remain) {
+        setShow(false);
+        onClose();
+      }
     }, 4000);
 
     return () => {
-      // TODO: Clear the timeout
+      clearTimeout(id);
     };
   }, []);
 

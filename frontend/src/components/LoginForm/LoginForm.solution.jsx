@@ -179,8 +179,8 @@ function LoginForm({ setLoginError }) {
 
       <div>
         <FormInput
-          errors={errors["email"]}
-          formState={formState["email"]}
+          error={errors["email"]}
+          value={formState["email"]}
           changeHandler={changeHandler}
           name="email"
           type="email"
@@ -188,8 +188,8 @@ function LoginForm({ setLoginError }) {
         />
 
         <FormInput
-          errors={errors["password"]}
-          formState={formState["password"]}
+          error={errors["password"]}
+          value={formState["password"]}
           changeHandler={changeHandler}
           name="password"
           type="password"
