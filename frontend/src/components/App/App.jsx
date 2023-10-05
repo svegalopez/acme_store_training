@@ -38,7 +38,7 @@ function Shop() {
       <button onClick={onClick}>Click me</button>
       <ul>
         {products.map((el) => (
-          <li>{el.name}</li>
+          <li key={el.id}>{el.name}</li>
         ))}
       </ul>
     </div>
