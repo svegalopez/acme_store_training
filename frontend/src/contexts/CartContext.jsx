@@ -11,7 +11,7 @@ const getGuestCart = () => JSON.parse(localStorage.getItem("cart") || "[]");
 
 export const CartContextProvider = function ({ children }) {
   const formRef = React.useRef();
-  //const [items, setItems] = React.useState( fill this in ); <-----------------------------
+  const [items, setItems] = React.useState(getGuestCart());
   const { user } = React.useContext(AuthContext);
   const prevUser = React.useRef(user);
   const [searchParams, setSearchParams] = useSearchParams();
@@ -47,7 +47,7 @@ export const CartContextProvider = function ({ children }) {
         }
       }
 
-      // setItems(getUsersCart(fill this in)); <--------
+      setItems(getUsersCart(user.email));
     }
     prevUser.current = user;
   }, [user]);
@@ -126,18 +126,26 @@ export const CartContextProvider = function ({ children }) {
 
   const submitCheckout = React.useCallback((item) => {
     if (item) {
-      // TODO: Handle the one click buy case <-----------------------------
-      // What form inputs do you need to set?
+      // When item is passed in, user is doing a one-click buy
+      formRef.current.isOneClick.value = "true";
+      formRef.current.cart.value = JSON.stringify([item]);
     }
     formRef.current.submit();
   }, []);
 
-  // return (
-  //   <CartContext.Provider
-  //     value={ fill this in } <-----------------------------
-  //   >
-  //     {children}
-  //     <CheckoutForm formRef={formRef} />
-  //   </CartContext.Provider>
-  // );
+  return (
+    <CartContext.Provider
+      value={{
+        items,
+        addToCart,
+        removeFromCart,
+        clearCart,
+        updateQuantity,
+        submitCheckout,
+      }}
+    >
+      {children}
+      <CheckoutForm formRef={formRef} />
+    </CartContext.Provider>
+  );
 };
