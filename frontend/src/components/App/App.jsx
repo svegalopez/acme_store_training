@@ -6,19 +6,22 @@ import { AuthContextProvider } from "../../contexts/AuthContext";
 import { Routes, Route } from "react-router-dom";
 import Login from "../Login/Login";
 import { GoogleOAuthProvider } from "@react-oauth/google";
+import { CartContextProvider } from "../../contexts/CartContext";
 
 function App() {
   return (
     <GoogleOAuthProvider clientId={process.env.GOOGLE_CLIENT_ID}>
       <AuthContextProvider>
-        <Header />
-        <main className={styles.container}>
-          <Routes>
-            <Route path="/" element={<Shop />} />
-            <Route path="/login" element={<Login />} />
-          </Routes>
-        </main>
-        <Footer />
+        <CartContextProvider>
+          <Header />
+          <main className={styles.container}>
+            <Routes>
+              <Route path="/" element={<Shop />} />
+              <Route path="/login" element={<Login />} />
+            </Routes>
+          </main>
+          <Footer />
+        </CartContextProvider>
       </AuthContextProvider>
     </GoogleOAuthProvider>
   );
