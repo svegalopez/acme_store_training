@@ -19,7 +19,7 @@ export default function Toaster({
 
   useEffect(() => {
     function handleClick(e) {
-      const parent = document.getElementById("ch-toaster");
+      const parent = document.getElementById("toaster-portal");
       if (!isDescendant(parent, e.target)) {
         setShow(false);
         onClose();
@@ -45,7 +45,7 @@ export default function Toaster({
   }, []);
 
   return createPortal(
-    <div id="ch-toaster" className={classes} style={style}>
+    <div className={classes} style={style}>
       <X
         className={styles.closeIcon}
         onClick={() => {

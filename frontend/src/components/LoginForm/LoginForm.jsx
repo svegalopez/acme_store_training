@@ -56,14 +56,6 @@ function LoginForm({ setLoginError }) {
             : "Email is not valid!";
         }
         break;
-      case "confirmPassword":
-        if (mode === "register") {
-          errors.confirmPassword =
-            value === formState.password
-              ? undefined
-              : "Passwords do not match!";
-        }
-        break;
       default:
         break;
     }
