@@ -5,11 +5,13 @@ import { useSearchParams } from "react-router-dom";
 
 export const CartContext = React.createContext();
 
-const getStoredItems = () => JSON.parse(localStorage.getItem("cart") || "[]");
+const getUsersCart = (email) =>
+  JSON.parse(localStorage.getItem(`cart.${email}`) || "[]");
+const getGuestCart = () => JSON.parse(localStorage.getItem("cart") || "[]");
 
 export const CartContextProvider = function ({ children }) {
   const formRef = React.useRef();
-  const [items, setItems] = React.useState(getStoredItems());
+  const [items, setItems] = React.useState(getGuestCart());
   const { user } = React.useContext(AuthContext);
   const prevUser = React.useRef(user);
   const [searchParams, setSearchParams] = useSearchParams();
@@ -17,7 +19,7 @@ export const CartContextProvider = function ({ children }) {
   React.useEffect(() => {
     if (prevUser.current && !user) {
       // restore guest cart when user logs out
-      setItems(getStoredItems());
+      setItems(getGuestCart());
     }
 
     if (user) {
@@ -45,7 +47,7 @@ export const CartContextProvider = function ({ children }) {
         }
       }
 
-      setItems(JSON.parse(localStorage.getItem(`cart.${user.email}`) || "[]"));
+      setItems(getUsersCart(user.email));
     }
     prevUser.current = user;
   }, [user]);
@@ -125,9 +127,8 @@ export const CartContextProvider = function ({ children }) {
   const submitCheckout = React.useCallback((item) => {
     if (item) {
       // When item is passed in, user is doing a one-click buy
-      formRef.current.querySelector("input[name='isOneClick']").value = "true";
-      formRef.current.querySelector("input[name='cart']").value =
-        JSON.stringify([item]);
+      formRef.current.isOneClick.value = "true";
+      formRef.current.cart.value = JSON.stringify([item]);
     }
     formRef.current.submit();
   }, []);
