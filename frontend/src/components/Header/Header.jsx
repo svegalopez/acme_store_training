@@ -8,10 +8,9 @@ import classes from "../../utils/classes";
 import LogOutDropDown from "../LogoutDropdown/LogoutDropdown";
 
 export default function Header() {
-  //const { items } = React.useContext(CartContext);
-  //const totalItems = items.reduce((a, b) => a + (b.qty || 0), 0);
-  //const cartDisplay = totalItems ? `Cart (${totalItems})` : "Cart";
-  const cartDisplay = "Cart";
+  const { items } = React.useContext(CartContext);
+  const totalItems = items.reduce((a, b) => a + (b.qty || 0), 0);
+  const cartDisplay = totalItems ? `Cart (${totalItems})` : "Cart";
 
   const { user, logout } = React.useContext(AuthContext);
   const isAdmin = user && user.role === "admin";
