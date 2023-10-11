@@ -8,6 +8,7 @@ import Login from "../Login/Login";
 import { GoogleOAuthProvider } from "@react-oauth/google";
 import { CartContextProvider } from "../../contexts/CartContext";
 import Shop from "../Shop/Shop";
+import Cart from "../Cart/Cart";
 
 function App() {
   return (
@@ -19,6 +20,7 @@ function App() {
             <Routes>
               <Route path="/" element={<Shop />} />
               <Route path="/login" element={<Login />} />
+              <Route path="/cart" element={<Cart />} />
             </Routes>
           </main>
           <Footer />
