@@ -39,20 +39,21 @@ export default function Cart() {
     staleTime: 1000 * 60 * 3,
   });
 
-  const cartTotal = React.useMemo(() => {
-    /*
-      TODO: Calculate the cart total
-      Clues: check out the Array.reduce method
-    */
-    return null;
-  }, []);
+  const cartTotal = React.useMemo(
+    () =>
+      items.reduce((a, b) => {
+        const product = products?.find((p) => p.id === b.productId);
+        return a + product?.price.amount * b.qty;
+      }, 0),
+    [items, products]
+  );
 
   const handleValidationError = React.useCallback(
     (invalid) => setInvalidItems(invalid),
     [setInvalidItems]
   );
 
-  // TODO: Render a loading spinner if the products are not loaded yet.
+  if (!products) return <Spinner />;
 
   return (
     <Page>
@@ -67,6 +68,7 @@ export default function Cart() {
           <CartItem
             error={invalidItems[item.productId]}
             key={item.productId}
+            product={products.find((p) => p.id === item.productId)}
             qty={item.qty}
             onQtyChange={() =>
               setInvalidItems({
@@ -84,7 +86,7 @@ export default function Cart() {
 }
 
 function CheckoutBar({ cartTotal, hidden, onValidationError }) {
-  const { submitCheckout, items } = React.useContext(CartContext);
+  const { clearCart, submitCheckout, items } = React.useContext(CartContext);
   const [showConfirmation, setShowConfirmation] = React.useState(null);
   const { user } = React.useContext(AuthContext);
   const [loading, setLoading] = React.useState(false);
@@ -113,13 +115,7 @@ function CheckoutBar({ cartTotal, hidden, onValidationError }) {
       <h3>Total: ${cartTotal || 0}</h3>
       <Button
         type="button"
-        clickHandler={() => {
-          /*
-            TODO: Implement clear cart functionality
-            Clues: 
-              - Call a function that you can get from the CartContext
-          */
-        }}
+        clickHandler={clearCart}
         className={classes(styles.cartBtn, styles.shiftLeft)}
       >
         Clear
@@ -141,30 +137,52 @@ function CheckoutBar({ cartTotal, hidden, onValidationError }) {
 
 function CheckoutConfirmation({ open, onOpenChange }) {
   const [loading, setLoading] = React.useState(false);
+  const { submitCheckout } = React.useContext(CartContext);
+  const navigate = useNavigate();
+
+  const clickHandler = React.useCallback(() => {
+    setLoading(true);
+    submitCheckout();
+  }, [submitCheckout]);
 
   const Content = React.useMemo(
     () => (
-      <div
-        style={{ height: "200px", width: "400px", backgroundColor: "white" }}
-      >
-        {/* 
-            TODO: Implement the checkout confirmation dialog. Start
-                  by removing the style prop from the div above. It's
-                  just there so that you can see the empty initial dialog.
-            Clues: 
-              - Try and match the design as close as possible, remember to use 
-                existing components.
-              - Choosing "login" should navigate to the login page with the
-                query param "checkout=true".
-              - Choosing "continue" should submit the checkout form 
-              - Remember that the Button component has a loading and a 
-                disabled prop.
-              - Remember that the CartContext has a function for submitting 
-                the checkout.
-          */}
+      <div className={styles.checkoutConfirmationOuter}>
+        <p className={styles.greeting}>Hello there!</p>
+        <div className={styles.confirmationText}>
+          <p>
+            <Link to="/login?redirect=checkout" className={styles.link}>
+              Log in
+            </Link>{" "}
+            for a better experience.
+          </p>
+          <p>
+            Or,{" "}
+            <Link className={styles.link} onClick={clickHandler}>
+              continue as a guest.
+            </Link>
+          </p>
+        </div>
+        <div className={styles.btnBar}>
+          <Button
+            clickHandler={() => navigate("/login?redirect=checkout")}
+            disabled={loading}
+            className={styles.btn}
+          >
+            Login
+          </Button>
+          <Button
+            disabled={loading}
+            loading={loading}
+            className={styles.btn}
+            clickHandler={clickHandler}
+          >
+            Continue
+          </Button>
+        </div>
       </div>
     ),
-    []
+    [clickHandler, loading]
   );
 
   return <Dialog open={open} onOpenChange={onOpenChange} content={Content} />;

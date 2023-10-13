@@ -1,18 +1,46 @@
-export default function CartItem() {
-  /*
-    TODO: Implement CartItem component
-    Clues:
+import React, { useContext } from "react";
+import styles from "./CartItem.module.css";
+import { Trash2 } from "react-feather";
+import { CartContext } from "../../contexts/CartContext";
+import Img from "../Image/Image";
+import classes from "../../utils/classes";
 
-    - This component should accept a product prop that has all the data for a product.
-    - This component should render a flex container with two items.
-    - The first item (left) should be an Img (image) component.
-    - The second item (right) should be another flex container with multiple items.
-    - This component should render an input that accepts numbers, for modifying the quantity of items in the cart.
-    - This component accepts an error prop, which should be used to conditionally render an error message, and style the input.
-    - This component should render a Trash2 (trash icon) component from react-feather,
-      upon clicking the trash icon, the correct function from the CartContext should be called.
-  
-  */
+export default function CartItem({ product, qty, error, onQtyChange }) {
+  const { removeFromCart, updateQuantity } = useContext(CartContext);
+  const amount = product?.price.amount * (qty || 0);
 
-  return "CartItem";
+  // Update quantity when input changes
+  const onChange = (event) => {
+    if (event.target.value >= 0) {
+      onQtyChange && onQtyChange();
+      updateQuantity(product.id, parseInt(event.target.value));
+    }
+  };
+
+  return (
+    <div className={styles.item}>
+      <Img
+        src={product.imgSrc}
+        className={styles.img}
+        alt={"Product image for " + product.name}
+      />
+      <div className={styles.details}>
+        <h3 className={styles.title}>{product.name}</h3>
+        <h3 className={styles.title}>${amount}</h3>
+        <div className={styles.footer}>
+          <input
+            className={classes(styles.qty, error && styles.error)}
+            type="number"
+            value={qty || "0"}
+            onChange={onChange}
+          />
+          {error && <p className={styles.error}>Invalid Qty</p>}
+          <Trash2
+            onClick={() => removeFromCart(product.id)}
+            className={styles.trash}
+          />
+        </div>
+      </div>
+    </div>
+  );
 }

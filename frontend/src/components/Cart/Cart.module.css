@@ -26,6 +26,39 @@
   margin-left: auto;
 }
 
+.checkoutConfirmationOuter {
+  background-color: var(--white);
+  color: var(--dark);
+  padding: 32px;
+  border: solid 2px var(--dark);
+  box-shadow: 2px 3px 15px 1px rgba(0, 0, 0, 0.1);
+}
+
+.greeting {
+  font-family: "Eczar", sans-serif;
+  font-size: 1.3rem;
+  color: var(--dark);
+}
+
+.confirmationText {
+  line-height: 1.5;
+}
+
+.link {
+  text-decoration: underline;
+  color: var(--hl);
+}
+
+.btnBar {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 24px;
+}
+
+.btn {
+  width: 100px;
+}
+
 .shopLink {
   font-weight: 600;
   color: inherit;
