@@ -65,7 +65,7 @@ router.post(
         line_items: JSON.parse(cart).map((item) => ({
           price: item.priceId,
           quantity: item.qty,
-          tax_rates: ["txr_xxxxxxxxxxxxxxxxxxxxxxxx"], // You must create this tax rate in your Stripe dashboard
+          tax_rates: ["txr_1NTWfVFx43n0rvYmDHg3gjWR"], // You must create this tax rate in your Stripe dashboard
         })),
         mode: "payment",
         success_url: `${APP_URL}/order-confirmation?session_id={CHECKOUT_SESSION_ID}`,
