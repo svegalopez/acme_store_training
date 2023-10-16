@@ -3,6 +3,7 @@ import React from "react";
 const useApi = (url, method = "GET", credentials = true) => {
   const [loading, setLoading] = React.useState(true);
   const [data, setData] = React.useState(null);
+  const [error, setError] = React.useState(null);
   const urlRef = React.useRef(url);
 
   React.useEffect(() => {
@@ -13,12 +14,13 @@ const useApi = (url, method = "GET", credentials = true) => {
       });
       if (res.ok) {
         const data = await res.json();
-        setTimeout(() => {
-          setLoading(false);
-          setData(data);
-        }, 250);
+        setLoading(false);
+        setData(data);
+        setError(null);
       } else {
-        console.error(await res.text());
+        setLoading(false);
+        setData(null);
+        setError(await res.text());
       }
     };
 
@@ -27,10 +29,10 @@ const useApi = (url, method = "GET", credentials = true) => {
   }, [url, credentials, method]);
 
   if (urlRef.current !== url) {
-    return { loading: true, data: null };
+    return { loading: true, data: null, error: null };
   }
 
-  return { loading, data };
+  return { loading, data, error };
 };
 
 export default useApi;
