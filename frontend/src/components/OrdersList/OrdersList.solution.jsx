@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import styles from "./OrdersList.module.css";
 import {
   ChevronUp,
@@ -25,6 +25,7 @@ export default function OrdersList({ hidden, isAdmin }) {
 
   const queryClient = useQueryClient();
   const statusEdited = React.useRef(false);
+  const prevData = React.useRef({ orders: [] });
 
   const { data, isLoading, error } = useQuery({
     queryKey: ["orders", { sortBy, sortOrder, page }],
@@ -32,9 +33,9 @@ export default function OrdersList({ hidden, isAdmin }) {
     staleTime: 1000 * 60 * 3,
   });
 
-  const orders = data?.orders || [];
-  const totalPages = data?.totalPages;
-  const hideTools = orders.length === 0 || isLoading;
+  const orders = data?.orders || prevData.current?.orders || [];
+  const totalPages = data?.totalPages || prevData.current?.totalPages;
+  const hideTools = orders.length === 0;
 
   const mutation = useMutation({
     mutationFn: updateOrderStatus,
@@ -178,15 +179,21 @@ export default function OrdersList({ hidden, isAdmin }) {
     ),
   };
 
+  useEffect(() => {
+    prevData.current = data;
+  }, [data]);
+
   return (
     <div style={hide(hidden)} className={styles.outer}>
       <PageSelect
+        loading={isLoading}
         hidden={hideTools}
         page={page}
         onPageChange={pageChangeHandler}
         totalPages={totalPages}
       />
       <Header
+        disabled={isLoading}
         hidden={hideTools}
         sortBy={sortBy}
         sortOrder={sortOrder}
@@ -355,31 +362,34 @@ function StatusSelect({
   );
 }
 
-function PageSelect({ page, totalPages, hidden, onPageChange }) {
+function PageSelect({ page, totalPages, hidden, onPageChange, loading }) {
   return (
     <div style={hide(hidden)} className={styles.pageSelect}>
       <button
+        style={hide(loading)}
         onClick={() => onPageChange(page - 1)}
         disabled={page === 1}
         className={styles.pageBtn}
       >
         <ChevronLeft size={16} />
       </button>
-      <span className={styles.page}>
+      <span style={hide(loading)} className={styles.page}>
         {page} of {totalPages}
       </span>
       <button
+        style={hide(loading)}
         onClick={() => onPageChange(page + 1)}
         disabled={page === totalPages || !totalPages}
         className={styles.pageBtn}
       >
         <ChevronRight size={16} />
       </button>
+      {loading && <Spinner small />}
     </div>
   );
 }
 
-function Header({ sortBy, sortOrder, sortHandler, hidden }) {
+function Header({ sortBy, sortOrder, sortHandler, hidden, disabled }) {
   const createdAtColClasses = classes(
     styles.colLabel,
     sortBy === "created_at" ? styles.activeFilter : ""
@@ -398,7 +408,7 @@ function Header({ sortBy, sortOrder, sortHandler, hidden }) {
   return (
     <div
       style={hide(hidden)}
-      onClick={sortHandler}
+      onClick={(e) => !disabled && sortHandler(e)}
       className={classes(styles.row, styles.header)}
     >
       <div className={styles.col1}>
@@ -439,7 +449,10 @@ function Header({ sortBy, sortOrder, sortHandler, hidden }) {
 }
 
 function StatusIndicator({ orders, isLoading }) {
-  if (isLoading) {
+  const firstLoad = React.useRef(true);
+
+  if (isLoading && firstLoad.current) {
+    firstLoad.current = false;
     return <p className={styles.centerText}>Fetching orders...</p>;
   } else if (orders?.length === 0 && !isLoading) {
     return <p className={styles.centerText}>No orders found</p>;
@@ -459,7 +472,7 @@ async function getOrders({ queryKey }) {
   if (!res.ok) {
     throw Error((await res.text()) || "Something went wrong");
   }
-  await wait(500);
+  await wait(200);
   return res.json();
 }
 
@@ -474,7 +487,7 @@ async function getMyOrders({ queryKey }) {
   if (!res.ok) {
     throw Error((await res.text()) || "Something went wrong");
   }
-  await wait(500);
+  await wait(200);
   return res.json();
 }
 
