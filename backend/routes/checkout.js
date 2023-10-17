@@ -152,16 +152,20 @@ router.post(
 
 async function fulfillPurchase(session) {
   try {
+    console.log(`Fulfilling order for session ${session.id}`);
     if (session.metadata.IS_PROD !== process.env.IS_PROD) return;
 
     // Send confirmation email
     const messageData = {
-      from: "Admin <email@sandboxdcxxx.mailgun.org>", // Make sure this matches your Mailgun domain
+      from: "Admin <email@sandboxdc00cf352cf44b4ea7c1ebe3330d8423.mailgun.org>", // Make sure this matches your Mailgun domain
       to: session.customer_details.email,
       subject: "Order Confirmation",
       html: JSON.stringify(session.line_items),
     };
-    await mg.messages.create("sandboxdcxxx.mailgun.org", messageData); // Make sure this matches your Mailgun domain
+    await mg.messages.create(
+      "sandboxdc00cf352cf44b4ea7c1ebe3330d8423.mailgun.org",
+      messageData
+    ); // Make sure this matches your Mailgun domain
     console.log(`Confirmation email sent for session ${session.id}`);
 
     // Add Order to database
