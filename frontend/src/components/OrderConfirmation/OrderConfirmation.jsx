@@ -1,20 +1,32 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Page from "../Page/Page";
 import Order from "../Order/Order";
 import useApi from "../../hooks/useApi";
+import { useSearchParams, Navigate } from "react-router-dom";
+import { CartContext } from "../../contexts/CartContext";
+import Spinner from "../Spinner/Spinner";
+import Toaster from "../Toaster/Toaster";
 
 export default function OrderConfirmation() {
-  // TODO: Get the session id from the URL query params and store it in a "sessionId" variable
+  const { clearCart } = React.useContext(CartContext);
+  const [searchParams] = useSearchParams();
+  const sessionId = searchParams.get("session_id");
 
-  // TODO: uncomment the following line after you have the sessionId variable
-  // const { data } = useApi(
-  //   `${process.env.HOST}/api/order-confirmation?session_id=${sessionId}`
-  // );
+  const { data, error, loading } = useApi(
+    `${process.env.HOST}/api/order-confirmation?session_id=${sessionId}`
+  );
 
-  // TODO: Clear the cart on mount
-  // TODO: If there is no session_id, redirect to 404
-  // TODO: If there is no data, show a spinner
+  useEffect(() => {
+    clearCart();
+  }, [clearCart]);
 
-  // TODO: Uncomment the following line after you have the data variable
-  return <Page>{/* <Order isConfirmation={true} order={data} /> */}</Page>;
+  if (!sessionId) return <Navigate to="/404" />;
+  if (loading) return <Spinner />;
+  if (error) return <Toaster>{error}</Toaster>;
+
+  return (
+    <Page>
+      <Order isConfirmation={true} order={{ data }} />
+    </Page>
+  );
 }

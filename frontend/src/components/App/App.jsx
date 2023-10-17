@@ -9,6 +9,8 @@ import { GoogleOAuthProvider } from "@react-oauth/google";
 import { CartContextProvider } from "../../contexts/CartContext";
 import Shop from "../Shop/Shop";
 import Cart from "../Cart/Cart";
+import OrderConfirmation from "../OrderConfirmation/OrderConfirmation";
+import Page from "../Page/Page";
 
 function App() {
   return (
@@ -21,6 +23,18 @@ function App() {
               <Route path="/" element={<Shop />} />
               <Route path="/login" element={<Login />} />
               <Route path="/cart" element={<Cart />} />
+              <Route
+                path="/order-confirmation"
+                element={<OrderConfirmation />}
+              />
+              <Route
+                path="*"
+                element={
+                  <Page>
+                    <h1>404: Not Found</h1>
+                  </Page>
+                }
+              />
             </Routes>
           </main>
           <Footer />

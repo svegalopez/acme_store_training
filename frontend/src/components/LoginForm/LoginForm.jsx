@@ -146,7 +146,7 @@ function LoginForm({ setLoginError }) {
     // If there are items in the guest cart, store the contents of the cart in local storage with the timestamp as the key
     // This will allow the system to recover the cart contents after the user logs in
     const guestCart = JSON.parse(localStorage.getItem("cart"));
-    if (guestCart.length) {
+    if (guestCart?.length) {
       localStorage.setItem(
         `cart.${timestamp.current}`,
         JSON.stringify(guestCart)

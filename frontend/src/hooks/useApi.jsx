@@ -18,9 +18,9 @@ const useApi = (url, method = "GET", credentials = true) => {
         setData(data);
         setError(null);
       } else {
+        setError(await res.text());
         setLoading(false);
         setData(null);
-        setError(await res.text());
       }
     };
 
