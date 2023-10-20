@@ -152,10 +152,29 @@
   top: 3px;
 }
 
-/*
+@media screen and (max-width: 768px) {
+  .header {
+    display: none;
+  }
 
-  TODO: use media queries to make the table responsive.
-  Hint: In small screens, the columns get stacked as rows within a record (see the design mockup).
-        Keep in mind that table is still sortable in small screens, so the styles should denote that.
+  .row {
+    flex-direction: column;
+    row-gap: 4px;
+    align-items: start;
+  }
 
-*/
+  .mobileLabel {
+    display: inline;
+  }
+
+  .col1 {
+    text-decoration: underline;
+    margin-bottom: 4px;
+  }
+}
+
+@media screen and (max-width: 400px) {
+  .outer {
+    font-size: 14px;
+  }
+}

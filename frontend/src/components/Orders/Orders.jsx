@@ -3,10 +3,12 @@ import Page from "../Page/Page";
 import { AuthContext } from "../../contexts/AuthContext";
 import { Navigate } from "react-router-dom";
 import OrdersList from "../OrdersList/OrdersList";
+import { Outlet } from "react-router-dom";
+import { useMatch } from "react-router-dom";
 
 export default function Orders() {
   const { user } = React.useContext(AuthContext);
-  // TODO: find out if the URL matches "/orders/:id"
+  const match = useMatch("/orders/:id");
 
   if (!user) {
     return <Navigate to="/login" />;
@@ -16,9 +18,8 @@ export default function Orders() {
 
   return (
     <Page>
-      {/* TODO: hide the list if the URL matches "/orders/:id" */}
-      <OrdersList isAdmin />
-      {/* TODO: show the order details if the URL matches "/orders/:id" */}
+      <OrdersList isAdmin hidden={match} />
+      <Outlet />
     </Page>
   );
 }

@@ -24,10 +24,8 @@ export default function OrdersList({ hidden, isAdmin }) {
   const [sortOrder, setSortOrder] = React.useState("desc");
 
   const queryClient = useQueryClient();
+  const statusEdited = React.useRef(false);
   const prevData = React.useRef({ orders: [] });
-  // TODO: Use a ref to keep track of status updates
-  // Hint: If a status gets updated you set a ref to true.
-  // What happens if you don't set the ref back to false?
 
   const { data, isLoading, error } = useQuery({
     queryKey: ["orders", { sortBy, sortOrder, page }],
@@ -64,6 +62,8 @@ export default function OrdersList({ hidden, isAdmin }) {
 
       // Remove the query for this order
       queryClient.removeQueries(["orders", variables.id]);
+
+      statusEdited.current = true;
     },
     onSettled: (data, error, variables) => {
       setUpdatingOrderMap({ ...isOrderUpdating, [variables.id]: false });
@@ -71,20 +71,21 @@ export default function OrdersList({ hidden, isAdmin }) {
   });
 
   const forceReloadOfSortedOrders = () => {
-    /* 
-      TODO: Implement this function.
-      Clues: 
-      - If you are keeping track of status updates with a ref, this is a good place to set the ref back to false.
-      - Use the queryClient.removeQueries function to remove "orders" queries
-      - Use the predicate option to only remove the queries that are sorted by "status"
-     
-    */
+    statusEdited.current = false;
+    queryClient.removeQueries({
+      queryKey: ["orders"],
+      predicate: (query) => {
+        if (query.queryKey[1]?.sortBy === "status") return true;
+        return false;
+      },
+    });
   };
 
   const pageChangeHandler = (page) => {
     setPage(page);
-    // TODO: If a status has been edited and the user changes the
-    // page you need to force the reload of the orders.
+    if (statusEdited.current) {
+      forceReloadOfSortedOrders();
+    }
   };
 
   const sortHandler = (e) => {
@@ -113,9 +114,7 @@ export default function OrdersList({ hidden, isAdmin }) {
 
     // Set the sort by column
     setSortBy(col);
-    if (col === "status") {
-      // TODO: Only force reload if a status has been edited
-      // Hint: Modify the if condition above
+    if (col === "status" && statusEdited.current) {
       forceReloadOfSortedOrders();
     }
   };
@@ -312,35 +311,81 @@ function StatusSelect({
   selectRowHandler,
 }) {
   return (
-    // TODO: Implement this component
-    /* 
-      Clues:
-      - Use the Select component from Radix UI
-      - Visit https://www.radix-ui.com/primitives/docs/components/select for docs
-      - Use the controlled mode, meaning you have to pass the "value" and "onValueChange" props.
-        View the docs for those props here: https://www.radix-ui.com/primitives/docs/components/select#root
-      - When a user open the select, the row should be selected, call the selectRowHandler function in the right place,
-        Hint: Is there an event handler prop that is called when the select is opened?
-      - There is no need to use the icons from the '@radix-ui/react-icons' library, you can use the icons from the 'react-feather' library.
-      - You can use css modules seamlessly with the Radix UI components, just import the styles and use them as you would normally do.
-    */
-    null
+    <Select.Root
+      onOpenChange={selectRowHandler}
+      onValueChange={statusChangeHandler}
+      value={value}
+    >
+      <Select.Trigger
+        style={hide(hidden)}
+        className={styles.selectTrigger}
+        aria-label="Status"
+      >
+        <Select.Value asChild>
+          <span>{loading ? <Spinner small /> : value}</span>
+        </Select.Value>
+        {!loading && (
+          <Select.Icon>
+            <ChevronDown className={styles.selectIcon} size={16} />
+          </Select.Icon>
+        )}
+      </Select.Trigger>
+      <Select.Portal>
+        <Select.Content
+          align={"end"}
+          position={"popper"}
+          className={styles.selectContent}
+        >
+          <Select.Viewport>
+            <Select.Item className={styles.selectItem} value="processing">
+              <Select.ItemText>processing</Select.ItemText>
+              <Select.ItemIndicator>
+                <Check className={styles.checkmark} size={16} />
+              </Select.ItemIndicator>
+            </Select.Item>
+            <Select.Item className={styles.selectItem} value="in transit">
+              <Select.ItemText>in transit</Select.ItemText>
+              <Select.ItemIndicator>
+                <Check className={styles.checkmark} size={16} />
+              </Select.ItemIndicator>
+            </Select.Item>
+            <Select.Item className={styles.selectItem} value="delivered">
+              <Select.ItemText>delivered</Select.ItemText>
+              <Select.ItemIndicator>
+                <Check className={styles.checkmark} size={16} />
+              </Select.ItemIndicator>
+            </Select.Item>
+          </Select.Viewport>
+        </Select.Content>
+      </Select.Portal>
+    </Select.Root>
   );
 }
 
 function PageSelect({ page, totalPages, hidden, onPageChange, loading }) {
   return (
-    /*
-      TODO: Implement this component
-      Clues:
-      - Use the "hide" util function to hide the component when the "hidden" prop is true
-      - Use the "loading" prop to show a small spinner when the data is loading
-      - Use the "page" and "totalPages" props to show the current page and the total number of pages
-      - Use the "onPageChange" prop to call the function when the user clicks on the buttons.
-        Keep in mind that the function should be called with page number the user is navigating to.
-        That means you need to either add or subtract 1 to the current page number.
-    */
-    null
+    <div style={hide(hidden)} className={styles.pageSelect}>
+      <button
+        style={hide(loading)}
+        onClick={() => onPageChange(page - 1)}
+        disabled={page === 1}
+        className={styles.pageBtn}
+      >
+        <ChevronLeft size={16} />
+      </button>
+      <span style={hide(loading)} className={styles.page}>
+        {page} of {totalPages}
+      </span>
+      <button
+        style={hide(loading)}
+        onClick={() => onPageChange(page + 1)}
+        disabled={page === totalPages || !totalPages}
+        className={styles.pageBtn}
+      >
+        <ChevronRight size={16} />
+      </button>
+      {loading && <Spinner small />}
+    </div>
   );
 }
 

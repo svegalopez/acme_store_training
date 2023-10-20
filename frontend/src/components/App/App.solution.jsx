@@ -83,85 +83,34 @@ function App() {
         <CartContextProvider>
           <Header />
           <main className={styles.container}>
-            <Routes>
-              <Route path="/" element={<Shop />} />
-              <Route
-                path="/cart"
-                element={
-                  <Suspense fallback={<Spinner />}>
-                    <Cart />
-                  </Suspense>
-                }
-              />
-              <Route
-                path="/my-orders"
-                element={
-                  <Suspense fallback={<Spinner />}>
-                    <MyOrders />
-                  </Suspense>
-                }
-              >
-                <Route path=":id" element={<MyOrderDetails />} />
-              </Route>
-              <Route
-                path="/orders"
-                element={
-                  <Suspense fallback={<Spinner />}>
-                    <Orders />
-                  </Suspense>
-                }
-              >
-                <Route path=":id" element={<OrderDetails />} />
-              </Route>
-              <Route
-                path="/order-confirmation"
-                element={
-                  <Suspense fallback={<Spinner />}>
-                    <OrderConfirmation />
-                  </Suspense>
-                }
-              />
-              <Route
-                path="/login"
-                element={
-                  <Suspense fallback={<Spinner />}>
-                    <Login />
-                  </Suspense>
-                }
-              />
-              <Route
-                path="/terms"
-                element={
-                  <Suspense fallback={<Spinner />}>
-                    <FooterPage />
-                  </Suspense>
-                }
-              />
-              <Route
-                path="/privacy"
-                element={
-                  <Suspense fallback={<Spinner />}>
-                    <FooterPage />
-                  </Suspense>
-                }
-              />
-              <Route
-                path="/contact"
-                element={
-                  <Suspense fallback={<Spinner />}>
-                    <FooterPage />
-                  </Suspense>
-                }
-              />
-              <Route
-                path="*"
-                element={
-                  <Page>
-                    <h1>404: Not Found</h1>
-                  </Page>
-                }
-              />
-            </Routes>
+            <Suspense fallback={<Spinner />}>
+              <Routes>
+                <Route path="/" element={<Shop />} />
+                <Route path="/cart" element={<Cart />} />
+                <Route path="/my-orders" element={<MyOrders />}>
+                  <Route path=":id" element={<MyOrderDetails />} />
+                </Route>
+                <Route path="/orders" element={<Orders />}>
+                  <Route path=":id" element={<OrderDetails />} />
+                </Route>
+                <Route
+                  path="/order-confirmation"
+                  element={<OrderConfirmation />}
+                />
+                <Route path="/login" element={<Login />} />
+                <Route path="/terms" element={<FooterPage />} />
+                <Route path="/privacy" element={<FooterPage />} />
+                <Route path="/contact" element={<FooterPage />} />
+                <Route
+                  path="*"
+                  element={
+                    <Page>
+                      <h1>404: Not Found</h1>
+                    </Page>
+                  }
+                />
+              </Routes>
+            </Suspense>
           </main>
           <Footer />
         </CartContextProvider>
