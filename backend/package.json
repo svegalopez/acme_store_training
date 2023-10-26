@@ -4,7 +4,7 @@
   "main": "server.js",
   "scripts": {
     "start:dev": "nodemon server.js",
-    "start": "node index.js",
+    "start": "node server.js",
     "start:test": "npx dotenv -e .env.test node server.js",
     "migrate:deploy": "npx prisma migrate deploy"
   },
