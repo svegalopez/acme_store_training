@@ -26,6 +26,9 @@ app.get("/health", (req, res) => {
 
 // Warmup request
 // Implement this endpoint that returns "OK" for the App Engine warmup request
+app.get("/_ah/warmup", (req, res) => {
+  res.send("OK");
+});
 
 // Endpoints
 app.use(

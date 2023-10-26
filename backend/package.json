@@ -4,9 +4,9 @@
   "main": "server.js",
   "scripts": {
     "start:dev": "nodemon server.js",
-    "start": "echo \"Implement this command...\" && exit 1",
+    "start": "node index.js",
     "start:test": "npx dotenv -e .env.test node server.js",
-    "migrate:deploy": "echo \"Implement this command...\" && exit 1"
+    "migrate:deploy": "npx prisma migrate deploy"
   },
   "prisma": {
     "seed": "node prisma/seed.js"
