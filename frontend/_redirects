@@ -1,2 +1,2 @@
-# create a redirect rule for static files here...
+/static/* /static/* 200
 /* /index.html 200
