@@ -5,7 +5,7 @@ const cookieParser = require("cookie-parser");
 const port = process.env.PORT || 3088;
 const app = express();
 
-console.log("PROD_DATABASE_URL", process.env.PROD_DATABASE_URL);
+console.log("DATABASE_URL", process.env.DATABASE_URL);
 console.log("====================================================");
 
 // Middleware
