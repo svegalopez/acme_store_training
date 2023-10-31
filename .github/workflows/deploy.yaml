@@ -48,7 +48,7 @@ jobs:
           directory: backend
         env:
           VALUE_runtime: nodejs18
-          ENVKEY_APP_URL: https://melodic-macaron-443f3f.netlify.app
+          ENVKEY_APP_URL: https://tranquil-capybara-5d145d.netlify.app
           ENVKEY_IS_PROD: true
           ENVKEY_JWT_SECRET: ${{ secrets.PROD_JWT_SECRET }}
           ENVKEY_DATABASE_URL: ${{ secrets.PROD_DATABASE_URL }}
