@@ -5,9 +5,6 @@ const cookieParser = require("cookie-parser");
 const port = process.env.PORT || 3088;
 const app = express();
 
-console.log("DATABASE_URL", process.env.DATABASE_URL);
-console.log("====================================================");
-
 // Middleware
 app.use(cookieParser());
 app.use(express.urlencoded({ extended: true }));
