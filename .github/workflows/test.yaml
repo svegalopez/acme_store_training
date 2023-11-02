@@ -13,8 +13,8 @@ jobs:
       postgres:
         image: postgres:15
         env:
-          POSTGRES_USER: ${{ secrets.TEST_PG_USER }}
-          POSTGRES_PASSWORD: ${{ secrets.TEST_PG_PASS }}
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: rootroot
         options: >-
           --health-cmd pg_isready
           --health-interval 10s
@@ -46,8 +46,8 @@ jobs:
         run: npx prisma migrate reset --force
         working-directory: backend
         env:
-          DATABASE_URL: ${{ secrets.TEST_DB_URL }}
-          ADMIN_USER_PASSWORD: ${{ secrets.ADMIN_USER_PASS }}
+          DATABASE_URL: postgres://postgres:rootroot@localhost:5432/acme_store_test
+          ADMIN_USER_PASSWORD: Password1!
 
       - name: Install Stripe-CLI
         run: |
@@ -71,14 +71,14 @@ jobs:
         run: npm run start:test &
         working-directory: backend
         env:
-          DATABASE_URL: ${{ secrets.TEST_DB_URL }}
+          DATABASE_URL: postgres://postgres:rootroot@localhost:5432/acme_store_test
           WEBHOOK_SECRET: ${{ env.SWH_SECRET }}
-          ADMIN_USER_PASSWORD: ${{ secrets.ADMIN_USER_PASS }}
+          ADMIN_USER_PASSWORD: Password1!
           API_URL: http://localhost:3088
           APP_URL: http://localhost:8081
           STRIPE_KEY: ${{ secrets.TEST_STRIPE_KEY }}
           MAILGUN_KEY: ${{ secrets.MAILGUN_KEY }}
-          JWT_SECRET: ${{ secrets.TEST_JWT_SECRET }}
+          JWT_SECRET: s3cre3t12345678
 
       - name: Start Frontend
         run: npm start &
