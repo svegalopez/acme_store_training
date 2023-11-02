@@ -61,7 +61,7 @@
 .priceBubble {
   background-color: var(--dark);
   color: var(--white);
-  width: 100px;
+  width: 105px;
   height: 100px;
   position: absolute;
   top: -50px;
