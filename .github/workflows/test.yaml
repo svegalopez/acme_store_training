@@ -1,0 +1,88 @@
+name: E2E Testing
+
+on:
+  pull_request:
+    branches: ["main"]
+  workflow_dispatch:
+
+jobs:
+  test:
+    name: E2E Tests
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:15
+        env:
+          POSTGRES_USER: ${{ secrets.TEST_PG_USER }}
+          POSTGRES_PASSWORD: ${{ secrets.TEST_PG_PASS }}
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 5432:5432
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Setup Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+
+      - name: Install root deps
+        run: npm install
+
+      - name: Install backend deps
+        run: npm install
+        working-directory: backend
+
+      - name: Install frontend deps
+        run: npm install
+        working-directory: frontend
+
+      - name: Migrate and Seed DB
+        run: npx prisma migrate reset --force
+        working-directory: backend
+        env:
+          DATABASE_URL: ${{ secrets.TEST_DB_URL }}
+          ADMIN_USER_PASSWORD: ${{ secrets.ADMIN_USER_PASS }}
+
+      - name: Install Stripe-CLI
+        run: |
+          export VERSION=1.17.0
+          wget "https://github.com/stripe/stripe-cli/releases/download/v$VERSION/stripe_${VERSION}_linux_x86_64.tar.gz"
+          tar -zxvf "stripe_${VERSION}_linux_x86_64.tar.gz"
+          mv stripe /usr/local/bin
+          stripe -v
+
+      - name: Forward Stripe Webhooks
+        run: stripe listen --forward-to localhost:3088/api/webhooks &
+        env:
+          STRIPE_API_KEY: ${{ secrets.TEST_STRIPE_KEY }}
+
+      - name: Capture Webhook Secret
+        run: echo "SWH_SECRET=$(stripe listen --forward-to localhost:3088/api/webhooks --print-secret)" >> $GITHUB_ENV
+        env:
+          STRIPE_API_KEY: ${{ secrets.TEST_STRIPE_KEY }}
+
+      - name: Start Backend
+        run: npm run start:test &
+        working-directory: backend
+        env:
+          DATABASE_URL: ${{ secrets.TEST_DB_URL }}
+          WEBHOOK_SECRET: ${{ env.SWH_SECRET }}
+          ADMIN_USER_PASSWORD: ${{ secrets.ADMIN_USER_PASS }}
+          API_URL: http://localhost:3088
+          APP_URL: http://localhost:8081
+          STRIPE_KEY: ${{ secrets.TEST_STRIPE_KEY }}
+          MAILGUN_KEY: ${{ secrets.MAILGUN_KEY }}
+          JWT_SECRET: ${{ secrets.TEST_JWT_SECRET }}
+
+      - name: Start Frontend
+        run: npm start &
+        working-directory: frontend
+
+      - name: Run E2E Tests
+        run: npm run test:ci

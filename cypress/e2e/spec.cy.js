@@ -8,13 +8,30 @@ describe("basic workflows", () => {
   it("should be able to purchase products", () => {
     cy.visit("/");
 
-    // Exercise 1. Add items to cart using the UI
+    // Add items to cart:
+    cy.contains("Premium Dog Food")
+      .closest("[data-testselector=product]")
+      .contains("Add to cart")
+      .click();
 
-    // Exercise 2. Visit the cart page
+    cy.contains("Cat Play Tower")
+      .closest("[data-testselector=product]")
+      .find("input[type=number]")
+      .type("2");
 
-    // Exercise 3. Click on Checkout
+    cy.contains("Cat Play Tower")
+      .closest("[data-testselector=product]")
+      .contains("Add to cart")
+      .click();
 
-    // Exercise 4. Choose login option when prompted
+    // Visit cart
+    cy.get("[data-testselector=navbar]").contains("Cart (3)").click();
+
+    // Click on Checkout
+    cy.contains("Checkout").click();
+
+    // Choose login option
+    cy.contains("Log in").click();
 
     // Make sure stripe errors do not stop the test
     cy.origin("https://checkout.stripe.com", () => {
@@ -23,7 +40,11 @@ describe("basic workflows", () => {
       });
     });
 
-    // Exercise 5. Register as a new user
+    // Register as a new user
+    cy.contains("create an account").click();
+    cy.get("input[name=email]").type(`${Date.now()}@test.com`);
+    cy.get("input[name=password]").type("Password1");
+    cy.get("button").contains("Register").click();
 
     // Wait until stripe checkout is loaded
     cy.wait(5000);
@@ -52,6 +73,6 @@ describe("basic workflows", () => {
       timeout: 20000,
     });
 
-    // Exercise 6. Assert order details
+    cy.contains("status: processing").should("exist");
   });
 });
