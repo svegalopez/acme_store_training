@@ -1,6 +1,7 @@
 import React from "react";
 import styles from "./Header.module.css";
 import logo from "../../assets/logo.svg";
+import acme_header from "../../assets/acme_header.png";
 import { NavLink, Link } from "react-router-dom";
 import { CartContext } from "../../contexts/CartContext";
 import { AuthContext } from "../../contexts/AuthContext";
@@ -25,10 +26,12 @@ export default function Header() {
     <header className={classes(styles.header, styles.slideDown)}>
       {user && <LogOutDropDown logoutHandler={logout} label={user.email} />}
       <div className={styles.imgContainer}>
-        <Link to="/">
+        {/* <Link to="/">
           <img src={logo} className={styles.headerImage} />
-        </Link>
+        </Link> */}
       </div>
+
+      <img src={acme_header} className={styles.headerImage} />
 
       <nav data-testselector="navbar" className={styles.navbar}>
         <NavLink to="/">Shop</NavLink>

@@ -3,8 +3,16 @@
   --headerHeightMob: 46px;
 
   /* Color Palette */
-  --hl: #f49865;
-  --dark: #163265;
-  --light: #d0fef6;
-  --white: #f5f3ed;
+  --hl: var(--brown-sugar);
+  --dark: var(--dark-green);
+  --light: var(--cadet-gray);
+  --white: var(--isabelline);
+
+  --dark-slate-gray: #264847ff;
+  --paynes-gray: #5c6c6eff;
+  --black-olive: #3a3b36ff;
+  --cadet-gray: #84999cff;
+  --isabelline: #f1e8e3ff;
+  --brown-sugar: #f48878;
+  --dark-green: #688182;
 }

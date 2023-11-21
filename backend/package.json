@@ -6,7 +6,8 @@
     "start:dev": "nodemon server.js",
     "start": "node server.js",
     "start:test": "npx dotenv -e .env.test node server.js",
-    "migrate:deploy": "npx prisma migrate deploy"
+    "migrate:deploy": "npx prisma migrate deploy",
+    "migrate:dev": "npx prisma migrate dev"
   },
   "prisma": {
     "seed": "node prisma/seed.js"
