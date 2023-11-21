@@ -8,6 +8,10 @@
   display: flex;
   justify-content: center;
   column-gap: 36px;
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  background-color: transparent;
 }
 
 .navbar a {
@@ -19,8 +23,10 @@
 }
 
 .headerImage {
-  height: 200px;
-  width: auto;
+  max-height: 600px;
+  margin: 0 auto;
+  object-fit: cover;
+  object-position: 50% 20%;
 }
 
 .imgContainer {
@@ -41,7 +47,10 @@
 }
 
 @media screen and (max-width: 728px) {
-  .slideDown {
+  /* .slideDown {
     padding-top: 32px;
+  } */
+  .headerImage {
+    min-height: 200px;
   }
 }
