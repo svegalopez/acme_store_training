@@ -67,23 +67,28 @@ function ProductDetails({ product }) {
 
   return (
     <div className={styles.productDetails}>
-      <div className={styles.productHeader}>
-        <h3 className={styles.productTitle}>{product.name}</h3>
-        <button
-          onClick={handleOneClickBuy}
-          className={styles.oneClickBuy}
-          to="/cart"
-        >
-          <DollarSign />
-          <MousePointer />
-        </button>
-        <h3 className={styles.productPrice}>${product.price.amount}</h3>
-        <div className={styles.priceBubble}></div>
-      </div>
-      <div className={styles.reviews}>
-        <span className={styles.stars}>{stars}</span>
-        <span> {product.rating.value}</span>
-        <span> ({product.rating.count})</span>
+      <div>
+        <div className={styles.productHeader}>
+          <h3 className={styles.productTitle}>{product.name}</h3>
+          <button
+            onClick={handleOneClickBuy}
+            className={styles.oneClickBuy}
+            to="/cart"
+          >
+            <DollarSign />
+            <MousePointer />
+          </button>
+          <h3 className={styles.productPrice}>${product.price.amount}</h3>
+          <div className={styles.priceBubble}></div>
+        </div>
+        <div className={styles.reviews}>
+          <span className={styles.stars}>{stars}</span>
+          <span> {product.rating.value}</span>
+          <span> ({product.rating.count})</span>
+        </div>
+        <div className={styles.textContainer}>
+          <p className={styles.productDescription}>{product.description}</p>
+        </div>
       </div>
       <div className={styles.addToCart}>
         <input
@@ -101,9 +106,6 @@ function ProductDetails({ product }) {
           {!showAddConfirmation && "Add to cart"}
           {showAddConfirmation && <CheckCircle className={styles.checkmark} />}
         </Button>
-      </div>
-      <div className={styles.textContainer}>
-        <p className={styles.productDescription}>{product.description}</p>
       </div>
     </div>
   );

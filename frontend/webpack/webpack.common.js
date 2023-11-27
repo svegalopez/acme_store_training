@@ -29,7 +29,7 @@ module.exports = {
             loader: "css-loader",
             options: {
               importLoaders: 1,
-              modules: true,
+              modules: { localIdentName: "[local]--[hash:base64:5]" },
             },
           },
         ],

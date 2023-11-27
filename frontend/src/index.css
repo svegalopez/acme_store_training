@@ -56,10 +56,6 @@ body {
   height: 100%;
 }
 
-a.active {
-  text-decoration: underline;
-}
-
 /* Fonts */
 @font-face {
   font-family: "Eczar";

@@ -15,6 +15,7 @@
 }
 
 .details {
+  color: var(--dark-slate-gray);
   padding: 8px;
   display: flex;
   flex-direction: column;

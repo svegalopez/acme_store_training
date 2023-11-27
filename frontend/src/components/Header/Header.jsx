@@ -24,15 +24,9 @@ export default function Header() {
 
   return (
     <header className={classes(styles.header, styles.slideDown)}>
+      {/* <h1 className={styles.heading}>Acme Pet Supplies</h1> */}
       {user && <LogOutDropDown logoutHandler={logout} label={user.email} />}
-      <div className={styles.imgContainer}>
-        {/* <Link to="/">
-          <img src={logo} className={styles.headerImage} />
-        </Link> */}
-      </div>
-
       <img src={acme_header} className={styles.headerImage} />
-
       <nav data-testselector="navbar" className={styles.navbar}>
         <NavLink to="/">Shop</NavLink>
         <NavLink to="cart">{cartDisplay}</NavLink>

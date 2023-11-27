@@ -7,7 +7,7 @@
   position: relative;
   overflow: hidden;
   width: 325px;
-  height: 425px;
+  /* height: 425px; */
   flex-direction: column;
 }
 
@@ -19,6 +19,11 @@
 }
 
 .productDetails {
+  color: var(--dark-slate-gray);
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
   border-radius: inherit;
   padding: 16px;
   background-color: rgba(255, 255, 255, 0.288);
@@ -114,7 +119,7 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  margin-top: 16px;
+  margin: 16px 0;
 }
 
 @media screen and (max-width: 500px) {
@@ -125,7 +130,7 @@
 
 @media only screen and (min-width: 501px) {
   .textContainer {
-    height: 50%;
+    /* height: 50%; */
     margin-top: 0;
   }
 
@@ -140,10 +145,10 @@
     flex-basis: 40%;
   }
 
-  .oneClickBuy {
+  /* .oneClickBuy {
     position: absolute;
     left: 8px;
-  }
+  } */
 
   .oneClickBuy svg {
     height: 18px;
