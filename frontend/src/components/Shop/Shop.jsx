@@ -3,6 +3,7 @@ import Product from "../Product/Product";
 import Page from "../Page/Page";
 import Spinner from "../Spinner/Spinner";
 import { useQuery } from "@tanstack/react-query";
+import Chatbot from "../Chatbot/Chatbot";
 
 export default function Shop() {
   const {
@@ -31,6 +32,7 @@ export default function Shop() {
           ))}
         </div>
       )}
+      <Chatbot />
     </Page>
   );
 }

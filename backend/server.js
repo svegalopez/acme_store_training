@@ -36,7 +36,8 @@ app.use(
   require("./routes/products"),
   require("./routes/orders"),
   require("./routes/checkout"),
-  require("./routes/auth")
+  require("./routes/auth"),
+  require("./routes/chatbot")
 );
 
 app.listen(port, () => {

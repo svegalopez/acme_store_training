@@ -23,6 +23,7 @@
     "google-auth-library": "^9.0.0",
     "jsonwebtoken": "^9.0.1",
     "mailgun.js": "^9.1.2",
+    "openai": "^4.20.1",
     "stripe": "^12.9.0"
   },
   "devDependencies": {

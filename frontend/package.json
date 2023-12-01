@@ -35,9 +35,11 @@
     "@radix-ui/react-select": "^1.2.2",
     "@react-oauth/google": "^0.11.1",
     "@tanstack/react-query": "^4.29.25",
+    "markdown-it": "^13.0.2",
     "mini-svg-data-uri": "^1.4.4",
     "minimist": "^1.2.8",
     "react": "^18.2.0",
+    "react-chatbot-kit": "^2.2.1",
     "react-dom": "^18.2.0",
     "react-feather": "^2.0.10",
     "react-router-dom": "^6.11.2"
