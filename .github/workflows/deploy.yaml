@@ -58,6 +58,8 @@ jobs:
           ENVKEY_GOOGLE_CLIENT_SECRET: ${{ secrets.GOOGLE_CLIENT_SECRET }}
           ENVKEY_GOOGLE_CLIENT_ID: ${{ vars.GOOGLE_CLIENT_ID }}
           ENVKEY_GOOGLE_REDIRECT_URI: ${{ vars.GOOGLE_REDIRECT_URI }}
+          ENVKEY_OPENAI_KEY: ${{ secrets.OPENAI_KEY }}
+          ENVKEY_OPENAI_ASSISTANT_ID: ${{ vars.OPENAI_ASSISTANT_ID }}
           AUTOSCALING_min_instances: 1
           INBOUND_SERVICES: "warmup"
 
