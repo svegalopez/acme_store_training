@@ -1,9 +1,23 @@
 const express = require("express");
 const router = express.Router();
 const { openai } = require("../clients");
+const { verify } = require("jsonwebtoken");
 
 router.post("/chat", async (req, res) => {
   try {
+    // Extract token from a cookie named "chatbot_token"
+    const token = req.cookies.chatbot_token;
+
+    if (!token) {
+      const noToken = new Error();
+      noToken.status = 401;
+      noToken.msg = "No token provided";
+      throw noToken;
+    }
+
+    // Verify the token
+    await verifyPromise(token, process.env.JWT_SECRET);
+
     const { message, thread_id } = req.body;
 
     let threadId;
@@ -62,5 +76,19 @@ router.post("/chat", async (req, res) => {
 function sleep(ms) {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
+
+const verifyPromise = (token, secret) => {
+  return new Promise((resolve, reject) => {
+    verify(token, secret, (err, decoded) => {
+      if (err) {
+        const customError = new Error(err.message);
+        customError.status = 401;
+        customError.msg = "Unable to verify credentials";
+        reject(customError);
+      }
+      resolve(decoded);
+    });
+  });
+};
 
 module.exports = router;

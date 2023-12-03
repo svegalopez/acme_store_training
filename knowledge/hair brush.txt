@@ -1,9 +1,7 @@
 Brand Name: Acme
-
 Product: Premium Pet Brush
 
 Dimensions:
-
 Length: 7 inches / 17.8 cm
 Width: 4 inches / 10.2 cm
 Bristle Length: 1 inch / 2.5 cm

@@ -1,9 +1,7 @@
 Brand Name: Acme DreamTail Comfort
-
 Product: Premium Dog Bed
 
 Sizes Available:
-
 Small: 24 x 18 inches / 61 x 45.7 cm (for dogs up to 25 lbs / 11.3 kg)
 Medium: 36 x 28 inches / 91.4 x 71.1 cm (for dogs up to 60 lbs / 27.2 kg)
 Large: 44 x 34 inches / 111.8 x 86.4 cm (for dogs up to 100 lbs / 45.4 kg)

@@ -3,7 +3,7 @@ import Product from "../Product/Product";
 import Page from "../Page/Page";
 import Spinner from "../Spinner/Spinner";
 import { useQuery } from "@tanstack/react-query";
-import Chatbot from "../Chatbot/Chatbot";
+import Bot from "../Bot/Bot";
 
 export default function Shop() {
   const {
@@ -13,7 +13,9 @@ export default function Shop() {
   } = useQuery({
     queryKey: ["products"],
     queryFn: async function () {
-      const response = await fetch(`${process.env.HOST}/api/products`);
+      const response = await fetch(`${process.env.HOST}/api/products`, {
+        credentials: "include",
+      });
       if (!response.ok) throw new Error(await response.text());
       return response.json();
     },
@@ -32,7 +34,7 @@ export default function Shop() {
           ))}
         </div>
       )}
-      <Chatbot />
+      <Bot />
     </Page>
   );
 }

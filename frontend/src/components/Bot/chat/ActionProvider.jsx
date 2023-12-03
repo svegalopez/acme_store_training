@@ -20,10 +20,10 @@ const ActionProvider = ({ createChatBotMessage, setState, children }) => {
     sendBtn.classList.add("react-chatbot-kit-chat-btn-send--disabled");
 
     const response = await fetch(`${process.env.HOST}/api/chat`, {
+      credentials: "include",
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        Authorization: "123456",
       },
       body: JSON.stringify({
         message,
@@ -34,7 +34,7 @@ const ActionProvider = ({ createChatBotMessage, setState, children }) => {
     const res = await response.json();
     threadId.current = res.threadId;
 
-    const renderedMarkdown = markdownToJson(res.response);
+    const renderedMarkdown = markdownToHTML(res.response);
     const botMessage = createCustomMessage(null, "custom", {
       payload: renderedMarkdown,
     });
@@ -48,36 +48,10 @@ const ActionProvider = ({ createChatBotMessage, setState, children }) => {
       };
     });
 
-    // Enable the send button
+    //Enable the send button
     sendBtn.disabled = false;
     sendBtn.classList.remove("react-chatbot-kit-chat-btn-send--disabled");
   };
-  //     setState((prev) => ({
-  //       ...prev,
-  //       messages: [...prev.messages, createChatBotMessage("loading...")],
-  //     }));
-
-  //     const response = await fetch(
-  //       `${process.env.HOST}/api/chatbot/completion?query=${message}`
-  //     );
-
-  //     // convert the response to text
-  //     const res = await response.json();
-  //     const renderedMarkdown = markdownToJson(res.response);
-
-  //     const botMessage = createCustomMessage(null, "custom", {
-  //       payload: renderedMarkdown,
-  //     });
-
-  //     setState((prev) => {
-  //       const messages = [...prev.messages];
-  //       messages.pop();
-  //       return {
-  //         ...prev,
-  //         messages: [...messages, botMessage],
-  //       };
-  //     });
-  //   };
 
   return (
     <div>
@@ -94,7 +68,7 @@ const ActionProvider = ({ createChatBotMessage, setState, children }) => {
 
 export default ActionProvider;
 
-function markdownToJson(markdown) {
+function markdownToHTML(markdown) {
   // Remove the following pattern 【whatever】from the string
   const quoteRegex = /【.*?】/g;
   markdown = markdown.replace(quoteRegex, "");

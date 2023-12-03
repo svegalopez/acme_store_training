@@ -5,9 +5,10 @@ import config from "./chat/config";
 import MessageParser from "./chat/MessageParser";
 import ActionProvider from "./chat/ActionProvider";
 import classes from "../../utils/classes";
-import isDescendant from "../../utils/isDescendant";
+//import isDescendant from "../../utils/isDescendant";
 
 import "react-chatbot-kit/build/main.css";
+import "./chatbot.css";
 
 export default function Bot() {
   const [hidden, setHidden] = React.useState(true);

@@ -1,9 +1,7 @@
 Brand Name: Acme
-
 Product: Cat Play Tower
 
 Dimensions:
-
 Height: 60 inches / 152 cm
 Base: 24 x 24 inches / 61 x 61 cm
 Weight: 30 lbs / 13.6 kg

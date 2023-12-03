@@ -1,5 +1,5 @@
 import { createChatBotMessage } from "react-chatbot-kit";
-import React, { useEffect } from "react";
+import React from "react";
 import logo from "../../../assets/logo.svg";
 
 const config = {
