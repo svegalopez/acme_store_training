@@ -1,11 +1,11 @@
 import React from "react";
-import styles from "./Chatbot.module.css";
+import styles from "./Bot.module.css";
 import Chatbot from "react-chatbot-kit";
 import config from "./chat/config";
 import MessageParser from "./chat/MessageParser";
 import ActionProvider from "./chat/ActionProvider";
 import classes from "../../utils/classes";
-//import isDescendant from "../../utils/isDescendant";
+import isDescendant from "../../utils/isDescendant";
 
 import "react-chatbot-kit/build/main.css";
 import "./chatbot.css";
@@ -42,7 +42,6 @@ export default function Bot() {
 function Chat() {
   return (
     <Chatbot
-      disableScrollToBottom
       config={config}
       messageParser={MessageParser}
       actionProvider={ActionProvider}
